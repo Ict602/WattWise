@@ -23,18 +23,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="⚡ WattWise"
-                android:textColor="#FFFFFF"
-                android:textSize="28sp"
-                android:textStyle="bold"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Smart Electricity Bill Estimator"
-                android:textColor="#C9D4E5"
-                android:textSize="14sp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4dp" />
 
@@ -45,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="Hello, User 👋"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp"
+                android:textSize="23sp"
                 android:textStyle="bold"
                 android:layout_marginTop="30dp" />
 
@@ -88,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:text="No record yet"
                         android:textColor="#FFFFFF"
-                        android:textSize="29sp"
+                        android:textSize="25sp"
                         android:textStyle="bold"
                         android:layout_marginTop="8dp" />
 
@@ -196,7 +189,7 @@
                         android:layout_height="wrap_content"
                         android:text="Bill History"
                         android:textColor="#FFFFFF"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginTop="10dp" />
 
@@ -236,7 +229,7 @@
                         android:layout_height="wrap_content"
                         android:text="About Me"
                         android:textColor="#FFFFFF"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginTop="10dp" />
 

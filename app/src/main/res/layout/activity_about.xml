@@ -13,10 +13,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⚡ WattWise"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp"
-            android:textStyle="bold"
             android:layout_gravity="center_horizontal" />
 
         <TextView
@@ -24,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="About WattWise"
             android:textColor="#C9D4E5"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="18dp" />
 
