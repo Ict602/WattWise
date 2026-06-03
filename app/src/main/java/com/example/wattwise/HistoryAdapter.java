@@ -79,12 +79,10 @@ public class HistoryAdapter extends BaseAdapter {
 
         txtMonthShort.setText(shortMonth);
 
+        // Requirement: display Month and Final Cost only
         txtMonthYear.setText(month + " " + years.get(position));
 
-        txtUsage.setText(
-                units.get(position) + " kWh • " +
-                        rebates.get(position) + "% Rebate"
-        );
+        txtUsage.setText("Final Cost");
 
         txtAmount.setText(
                 "RM " + String.format(Locale.US, "%.2f", costs.get(position))

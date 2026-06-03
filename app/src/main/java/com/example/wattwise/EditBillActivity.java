@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
@@ -74,43 +75,32 @@ public class EditBillActivity extends AppCompatActivity {
         updatePreview();
 
         etUnit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 updatePreview();
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
+            @Override public void afterTextChanged(Editable s) {}
         });
 
         spMonth.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
+            @Override public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
                 updatePreview();
             }
 
-            @Override
-            public void onNothingSelected(android.widget.AdapterView<?> parent) {
-            }
+            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
         });
 
         spRebate.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
+            @Override public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
                 updatePreview();
             }
 
-            @Override
-            public void onNothingSelected(android.widget.AdapterView<?> parent) {
-            }
+            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
         });
 
-        btnUpdate.setOnClickListener(v -> updateRecord());
+        btnUpdate.setOnClickListener(v -> confirmUpdate());
         btnCancel.setOnClickListener(v -> finish());
     }
 
@@ -200,6 +190,15 @@ public class EditBillActivity extends AppCompatActivity {
         txtNewCost.setText(String.format(Locale.US, "RM %.2f", previewFinal));
     }
 
+    private void confirmUpdate() {
+        new AlertDialog.Builder(this)
+                .setTitle("Update Record")
+                .setMessage("Are you sure you want to update this bill record?")
+                .setPositiveButton("Yes", (dialog, which) -> updateRecord())
+                .setNegativeButton("No", null)
+                .show();
+    }
+
     private void updateRecord() {
         String unitText = etUnit.getText().toString().trim();
 
@@ -237,8 +236,11 @@ public class EditBillActivity extends AppCompatActivity {
         );
 
         if (updated) {
-            Toast.makeText(this, "Record updated successfully", Toast.LENGTH_SHORT).show();
-            finish();
+            new AlertDialog.Builder(this)
+                    .setTitle("Success")
+                    .setMessage("Record updated successfully.")
+                    .setPositiveButton("OK", (dialog, which) -> finish())
+                    .show();
         } else {
             Toast.makeText(this, "Failed to update record", Toast.LENGTH_SHORT).show();
         }
