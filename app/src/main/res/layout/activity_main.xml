@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- BACKGROUND IMAGE -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/login_bg"
+        android:scaleType="centerCrop" />
+
+    <!-- DARK OVERLAY -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:paddingTop="78dp"
+            android:paddingBottom="35dp">
+
+            <!-- LOGO -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚡ WattWise"
+                android:textColor="#FFFFFF"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Smart Electricity Bill Estimator"
+                android:textColor="#D0D0D0"
+                android:textSize="15sp"
+                android:layout_marginTop="5dp" />
+
+            <!-- SPACE FOR BULB -->
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <!-- WELCOME -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Welcome"
+                android:textColor="#FFFFFF"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Track your electricity usage and save smarter."
+                android:textColor="#D0D0D0"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_marginTop="6dp" />
+
+            <!-- EMAIL -->
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="✉️   Email Address"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#C9D4E5"
+                android:textSize="17sp"
+                android:background="@drawable/bg_login_input"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:inputType="textEmailAddress"
+                android:layout_marginTop="25dp" />
+
+            <!-- PASSWORD -->
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="🔒   Password"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#C9D4E5"
+                android:textSize="17sp"
+                android:background="@drawable/bg_login_input"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:inputType="textPassword"
+                android:layout_marginTop="14dp" />
+
+            <!-- FORGOT PASSWORD -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password?  ›"
+                android:textColor="#FFC107"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_gravity="end"
+                android:layout_marginTop="12dp" />
+
+            <!-- LOGIN BUTTON -->
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="LOGIN"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:backgroundTint="#FFC107"
+                android:layout_marginTop="20dp" />
+
+            <!-- OR -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="────────  OR  ────────"
+                android:textColor="#AAB7C8"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginTop="20dp" />
+
+            <!-- GOOGLE BUTTON -->
+            <LinearLayout
+                android:id="@+id/btnGoogle"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/bg_google_button"
+                android:layout_marginTop="18dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/gugel" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Continue with Google"
+                    android:textColor="#111827"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="14dp" />
+
+            </LinearLayout>
+
+            <!-- SIGN UP -->
+            <TextView
+                android:id="@+id/tvSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Don’t have an account?  Sign Up  ›"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:layout_marginTop="22dp"
+                android:layout_marginBottom="15dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>
