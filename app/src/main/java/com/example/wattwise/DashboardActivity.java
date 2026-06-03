@@ -81,10 +81,7 @@ public class DashboardActivity extends AppCompatActivity {
             int year = cursor.getInt(1);
             double finalCost = cursor.getDouble(2);
 
-            txtCurrentAmount.setText(
-                    String.format(Locale.US, "RM %.2f", finalCost)
-            );
-
+            txtCurrentAmount.setText(String.format(Locale.US, "RM %.2f", finalCost));
             txtCurrentMonth.setText(month + " " + year);
         } else {
             txtCurrentAmount.setText("No record yet");

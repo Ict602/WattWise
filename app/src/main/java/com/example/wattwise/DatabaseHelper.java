@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteConstraintException;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -44,6 +45,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    // ================= USER FUNCTIONS =================
+
+    public boolean insertUser(String fullname, String email, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("fullname", fullname);
+        values.put("email", email);
+        values.put("password", password);
+
+        try {
+            long result = db.insertOrThrow("users", null, values);
+            return result != -1;
+        } catch (SQLiteConstraintException e) {
+            return false;
+        }
+    }
+
+    public boolean checkEmailExists(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM users WHERE email = ?",
+                new String[]{email}
+        );
+
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+
+        return exists;
+    }
+
     public boolean checkLogin(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -75,6 +108,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return name;
     }
+
+    public boolean updatePassword(String email, String newPassword) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("password", newPassword);
+
+        int result = db.update(
+                "users",
+                values,
+                "email = ?",
+                new String[]{email}
+        );
+
+        return result > 0;
+    }
+
+    // ================= BILL FUNCTIONS =================
 
     public boolean insertBill(String month, int year, int unit, int rebate, double totalCharges, double finalCost) {
         SQLiteDatabase db = this.getWritableDatabase();

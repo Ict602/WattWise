@@ -101,16 +101,33 @@
                 android:inputType="textPassword"
                 android:layout_marginTop="14dp" />
 
-            <!-- FORGOT PASSWORD -->
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- SIGN UP + FORGOT PASSWORD ROW -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Forgot Password?  ›"
-                android:textColor="#FFC107"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_gravity="end"
-                android:layout_marginTop="12dp" />
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+
+                <TextView
+                    android:id="@+id/txtRegister"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sign Up  ›"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtForgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot Password?  ›"
+                    android:textColor="#FFC107"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <!-- LOGIN BUTTON -->
             <Button
@@ -161,17 +178,6 @@
                     android:layout_marginStart="14dp" />
 
             </LinearLayout>
-
-            <!-- SIGN UP -->
-            <TextView
-                android:id="@+id/tvSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Don’t have an account?  Sign Up  ›"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:layout_marginTop="22dp"
-                android:layout_marginBottom="15dp" />
 
         </LinearLayout>
 
