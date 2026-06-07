@@ -1,6 +1,5 @@
 package com.example.wattwise;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
@@ -47,12 +47,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
         loadBillDetail();
 
-        btnEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(BillDetailActivity.this, EditBillActivity.class);
-            intent.putExtra("BILL_ID", billId);
-            startActivity(intent);
-        });
-
+        btnEdit.setOnClickListener(v -> confirmEdit());
         btnDelete.setOnClickListener(v -> confirmDelete());
     }
 
@@ -78,10 +73,11 @@ public class BillDetailActivity extends AppCompatActivity {
 
             txtMonthYear.setText(month + " " + year);
             txtUnit.setText(unit + " kWh");
-            txtRebate.setText(rebate + "%");
+            txtRebate.setText(rebate + "% Rebate");
             txtTotalCharges.setText(String.format(Locale.US, "RM %.2f", totalCharges));
             txtRebateAmount.setText(String.format(Locale.US, "-RM %.2f", rebateAmount));
             txtFinalCost.setText(String.format(Locale.US, "RM %.2f", finalCost));
+
         } else {
             Toast.makeText(this, "Record not found", Toast.LENGTH_SHORT).show();
             finish();
@@ -92,21 +88,42 @@ public class BillDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void confirmEdit() {
+        new AlertDialog.Builder(this)
+                .setTitle("Edit Record")
+                .setMessage("Do you want to edit this bill record?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    Intent intent = new Intent(
+                            BillDetailActivity.this,
+                            EditBillActivity.class
+                    );
+                    intent.putExtra("BILL_ID", billId);
+                    startActivity(intent);
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
     private void confirmDelete() {
         new AlertDialog.Builder(this)
                 .setTitle("Delete Record")
                 .setMessage("Are you sure you want to delete this bill record?")
-                .setPositiveButton("Delete", (dialog, which) -> {
-                    boolean deleted = databaseHelper.deleteBill(billId);
-
-                    if (deleted) {
-                        Toast.makeText(this, "Record deleted successfully", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(this, "Failed to delete record", Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .setPositiveButton("Delete", (dialog, which) -> deleteRecord())
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private void deleteRecord() {
+        boolean deleted = databaseHelper.deleteBill(billId);
+
+        if (deleted) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Success")
+                    .setMessage("Record deleted successfully.")
+                    .setPositiveButton("OK", (dialog, which) -> finish())
+                    .show();
+        } else {
+            Toast.makeText(this, "Failed to delete record", Toast.LENGTH_SHORT).show();
+        }
     }
 }

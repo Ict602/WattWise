@@ -8,6 +8,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
@@ -55,8 +56,8 @@ public class CalculatorActivity extends AppCompatActivity {
         setupSpinners();
 
         btnCalculate.setOnClickListener(v -> calculateBill());
-        btnReset.setOnClickListener(v -> resetForm());
-        btnSave.setOnClickListener(v -> saveRecord());
+        btnSave.setOnClickListener(v -> confirmSaveRecord());
+        btnReset.setOnClickListener(v -> confirmResetForm());
     }
 
     private void setupSpinners() {
@@ -93,7 +94,13 @@ public class CalculatorActivity extends AppCompatActivity {
             return;
         }
 
-        unit = Integer.parseInt(unitText);
+        try {
+            unit = Integer.parseInt(unitText);
+        } catch (Exception e) {
+            etUnit.setError("Please enter a valid number.");
+            etUnit.requestFocus();
+            return;
+        }
 
         if (unit < 1 || unit > 1000) {
             etUnit.setError("Unit must be between 1 and 1000 kWh.");
@@ -116,7 +123,11 @@ public class CalculatorActivity extends AppCompatActivity {
 
         isCalculated = true;
 
-        Toast.makeText(this, "Calculation completed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(
+                this,
+                "Electricity bill calculated successfully",
+                Toast.LENGTH_SHORT
+        ).show();
     }
 
     private double calculateTotalCharges(int unit) {
@@ -131,12 +142,21 @@ public class CalculatorActivity extends AppCompatActivity {
         }
     }
 
-    private void saveRecord() {
+    private void confirmSaveRecord() {
         if (!isCalculated) {
             Toast.makeText(this, "Please calculate the bill first", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        new AlertDialog.Builder(this)
+                .setTitle("Save Record")
+                .setMessage("Are you sure you want to save this bill record?")
+                .setPositiveButton("Yes", (dialog, which) -> saveRecord())
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void saveRecord() {
         boolean inserted = databaseHelper.insertBill(
                 selectedMonth,
                 currentYear,
@@ -147,11 +167,32 @@ public class CalculatorActivity extends AppCompatActivity {
         );
 
         if (inserted) {
-            Toast.makeText(this, "Record saved successfully", Toast.LENGTH_SHORT).show();
-            finish();
+            new AlertDialog.Builder(this)
+                    .setTitle("Record Saved")
+                    .setMessage(
+                            "Your electricity bill record has been saved successfully.\n\n" +
+                                    "Month: " + selectedMonth + "\n" +
+                                    "Total Charges: RM " + String.format(Locale.US, "%.2f", totalCharges) + "\n" +
+                                    "Final Cost: RM " + String.format(Locale.US, "%.2f", finalCost)
+                    )
+                    .setPositiveButton("OK", (dialog, which) -> finish())
+                    .show();
         } else {
-            Toast.makeText(this, "Failed to save record", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(this)
+                    .setTitle("Save Failed")
+                    .setMessage("Unable to save bill record.")
+                    .setPositiveButton("OK", null)
+                    .show();
         }
+    }
+
+    private void confirmResetForm() {
+        new AlertDialog.Builder(this)
+                .setTitle("Reset Form")
+                .setMessage("Are you sure you want to clear all fields?")
+                .setPositiveButton("Yes", (dialog, which) -> resetForm())
+                .setNegativeButton("No", null)
+                .show();
     }
 
     private void resetForm() {
@@ -172,6 +213,6 @@ public class CalculatorActivity extends AppCompatActivity {
 
         etUnit.clearFocus();
 
-        Toast.makeText(this, "Form reset", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Form reset successfully", Toast.LENGTH_SHORT).show();
     }
 }
