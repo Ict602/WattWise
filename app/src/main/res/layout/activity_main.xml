@@ -141,45 +141,12 @@
                     android:backgroundTint="#FFC107"
                     android:layout_marginTop="18dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="────────  OR  ────────"
-                    android:textColor="#AAB7C8"
-                    android:textSize="13sp"
-                    android:gravity="center"
-                    android:layout_marginTop="16dp" />
-
-                <LinearLayout
-                    android:id="@+id/btnGoogle"
-                    android:layout_width="match_parent"
-                    android:layout_height="54dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:background="@drawable/bg_google_button"
-                    android:layout_marginTop="14dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/gugel" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Continue with Google"
-                        android:textColor="#111827"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:layout_marginStart="12dp" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+
 
     </ScrollView>
 

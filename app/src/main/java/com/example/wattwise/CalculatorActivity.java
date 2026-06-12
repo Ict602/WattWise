@@ -1,5 +1,7 @@
 package com.example.wattwise;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.content.Intent;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +21,12 @@ import java.util.Locale;
 
 public class CalculatorActivity extends AppCompatActivity {
 
-    Spinner spMonth, spRebate;
+    Spinner spMonth;
     EditText etUnit;
-    Button btnCalculate, btnReset, btnSave;
+
+    Button btnCalculate, btnReset, btnSave, btnDashboard;
+    Button btnRebate0, btnRebate1, btnRebate2, btnRebate3, btnRebate4, btnRebate5;
+
     TextView txtTotalCharges, txtFinalCost, txtFinalNote;
 
     DatabaseHelper databaseHelper;
@@ -42,12 +48,19 @@ public class CalculatorActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         spMonth = findViewById(R.id.spMonth);
-        spRebate = findViewById(R.id.spRebate);
         etUnit = findViewById(R.id.etUnit);
 
         btnCalculate = findViewById(R.id.btnCalculate);
         btnReset = findViewById(R.id.btnReset);
         btnSave = findViewById(R.id.btnSave);
+        btnDashboard = findViewById(R.id.btnDashboard);
+
+        btnRebate0 = findViewById(R.id.btnRebate0);
+        btnRebate1 = findViewById(R.id.btnRebate1);
+        btnRebate2 = findViewById(R.id.btnRebate2);
+        btnRebate3 = findViewById(R.id.btnRebate3);
+        btnRebate4 = findViewById(R.id.btnRebate4);
+        btnRebate5 = findViewById(R.id.btnRebate5);
 
         txtTotalCharges = findViewById(R.id.txtTotalCharges);
         txtFinalCost = findViewById(R.id.txtFinalCost);
@@ -55,36 +68,76 @@ public class CalculatorActivity extends AppCompatActivity {
 
         currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        setupSpinners();
+        setupMonthSpinner();
+        setupRebateButtons();
 
         btnCalculate.setOnClickListener(v -> calculateBill());
         btnSave.setOnClickListener(v -> confirmSaveRecord());
         btnReset.setOnClickListener(v -> confirmResetForm());
+        btnDashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    CalculatorActivity.this,
+                    DashboardActivity.class
+            );
+
+            intent.setFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP
+            );
+
+            startActivity(intent);
+            finish();
+        });
     }
 
-    private void setupSpinners() {
+    private void setupMonthSpinner() {
         String[] months = {
                 "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
         };
-
-        String[] rebates = {"0%", "1%", "2%", "3%", "4%", "5%"};
 
         ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(
                 this,
                 R.layout.spinner_selected,
                 months
         );
+
         monthAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
         spMonth.setAdapter(monthAdapter);
+    }
 
-        ArrayAdapter<String> rebateAdapter = new ArrayAdapter<>(
-                this,
-                R.layout.spinner_selected,
-                rebates
+    private void setupRebateButtons() {
+        btnRebate0.setOnClickListener(v -> selectRebate(0));
+        btnRebate1.setOnClickListener(v -> selectRebate(1));
+        btnRebate2.setOnClickListener(v -> selectRebate(2));
+        btnRebate3.setOnClickListener(v -> selectRebate(3));
+        btnRebate4.setOnClickListener(v -> selectRebate(4));
+        btnRebate5.setOnClickListener(v -> selectRebate(5));
+
+        selectRebate(0);
+    }
+
+    private void selectRebate(int rebate) {
+        selectedRebate = rebate;
+
+        Button[] buttons = {
+                btnRebate0, btnRebate1, btnRebate2,
+                btnRebate3, btnRebate4, btnRebate5
+        };
+
+        for (Button button : buttons) {
+            button.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
+            );
+            button.setTextColor(Color.parseColor("#020B1A"));
+        }
+
+        buttons[rebate].setBackgroundTintList(
+                ColorStateList.valueOf(Color.parseColor("#FFC107"))
         );
-        rebateAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
-        spRebate.setAdapter(rebateAdapter);
+        buttons[rebate].setTextColor(Color.BLACK);
+
+        isCalculated = false;
     }
 
     private void calculateBill() {
@@ -123,7 +176,6 @@ public class CalculatorActivity extends AppCompatActivity {
         }
 
         selectedMonth = spMonth.getSelectedItem().toString();
-        selectedRebate = spRebate.getSelectedItemPosition();
 
         totalCharges = calculateTotalCharges(unit);
         totalCharges = Math.round(totalCharges * 100.0) / 100.0;
@@ -192,7 +244,6 @@ public class CalculatorActivity extends AppCompatActivity {
                     "Record Saved",
                     "Your electricity bill record has been saved successfully.\n\n" +
                             "Month: " + selectedMonth + "\n" +
-                            "Total Charges: RM " + String.format(Locale.US, "%.2f", totalCharges) + "\n" +
                             "Final Cost: RM " + String.format(Locale.US, "%.2f", finalCost),
                     true
             );
@@ -220,7 +271,7 @@ public class CalculatorActivity extends AppCompatActivity {
     private void resetForm() {
         etUnit.setText("");
         spMonth.setSelection(0);
-        spRebate.setSelection(0);
+        selectRebate(0);
 
         txtTotalCharges.setText("RM 0.00");
         txtFinalCost.setText("RM 0.00");

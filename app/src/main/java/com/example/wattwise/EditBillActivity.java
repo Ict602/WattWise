@@ -1,6 +1,8 @@
 package com.example.wattwise;
 
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,9 +20,11 @@ import java.util.Locale;
 
 public class EditBillActivity extends AppCompatActivity {
 
-    Spinner spMonth, spRebate;
+    Spinner spMonth;
     EditText etUnit;
+
     Button btnUpdate, btnCancel;
+    Button btnRebate0, btnRebate1, btnRebate2, btnRebate3, btnRebate4, btnRebate5;
 
     TextView txtMonthBadge, txtCurrentRecord, txtCurrentCost, txtNewCost;
 
@@ -40,8 +44,6 @@ public class EditBillActivity extends AppCompatActivity {
             "July", "August", "September", "October", "November", "December"
     };
 
-    String[] rebates = {"0%", "1%", "2%", "3%", "4%", "5%"};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,28 +52,30 @@ public class EditBillActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         spMonth = findViewById(R.id.spMonth);
-        spRebate = findViewById(R.id.spRebate);
         etUnit = findViewById(R.id.etUnit);
 
         btnUpdate = findViewById(R.id.btnUpdate);
         btnCancel = findViewById(R.id.btnCancel);
+
+        btnRebate0 = findViewById(R.id.btnRebate0);
+        btnRebate1 = findViewById(R.id.btnRebate1);
+        btnRebate2 = findViewById(R.id.btnRebate2);
+        btnRebate3 = findViewById(R.id.btnRebate3);
+        btnRebate4 = findViewById(R.id.btnRebate4);
+        btnRebate5 = findViewById(R.id.btnRebate5);
 
         txtMonthBadge = findViewById(R.id.txtMonthBadge);
         txtCurrentRecord = findViewById(R.id.txtCurrentRecord);
         txtCurrentCost = findViewById(R.id.txtCurrentCost);
         txtNewCost = findViewById(R.id.txtNewCost);
 
-        setupSpinners();
+        setupMonthSpinner();
+        setupRebateButtons();
 
         billId = getIntent().getIntExtra("BILL_ID", -1);
 
         if (billId == -1) {
-            showInfoDialog(
-                    "❌",
-                    "Invalid Record",
-                    "This bill record is not valid.",
-                    true
-            );
+            showInfoDialog("❌", "Invalid Record", "This bill record is not valid.", true);
             return;
         }
 
@@ -80,21 +84,11 @@ public class EditBillActivity extends AppCompatActivity {
 
         etUnit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(
-                    CharSequence s,
-                    int start,
-                    int count,
-                    int after
-            ) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(
-                    CharSequence s,
-                    int start,
-                    int before,
-                    int count
-            ) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 updatePreview();
             }
 
@@ -108,27 +102,7 @@ public class EditBillActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(
                             android.widget.AdapterView<?> parent,
-                            android.view.View view,
-                            int position,
-                            long id
-                    ) {
-                        updatePreview();
-                    }
-
-                    @Override
-                    public void onNothingSelected(
-                            android.widget.AdapterView<?> parent
-                    ) {
-                    }
-                }
-        );
-
-        spRebate.setOnItemSelectedListener(
-                new android.widget.AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(
-                            android.widget.AdapterView<?> parent,
-                            android.view.View view,
+                            View view,
                             int position,
                             long id
                     ) {
@@ -147,22 +121,53 @@ public class EditBillActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(v -> finish());
     }
 
-    private void setupSpinners() {
+    private void setupMonthSpinner() {
         ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(
                 this,
                 R.layout.spinner_selected,
                 months
         );
+
         monthAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
         spMonth.setAdapter(monthAdapter);
+    }
 
-        ArrayAdapter<String> rebateAdapter = new ArrayAdapter<>(
-                this,
-                R.layout.spinner_selected,
-                rebates
+    private void setupRebateButtons() {
+        btnRebate0.setOnClickListener(v -> selectRebate(0));
+        btnRebate1.setOnClickListener(v -> selectRebate(1));
+        btnRebate2.setOnClickListener(v -> selectRebate(2));
+        btnRebate3.setOnClickListener(v -> selectRebate(3));
+        btnRebate4.setOnClickListener(v -> selectRebate(4));
+        btnRebate5.setOnClickListener(v -> selectRebate(5));
+
+        selectRebate(0);
+    }
+
+    private void selectRebate(int value) {
+        rebate = value;
+
+        Button[] buttons = {
+                btnRebate0,
+                btnRebate1,
+                btnRebate2,
+                btnRebate3,
+                btnRebate4,
+                btnRebate5
+        };
+
+        for (Button button : buttons) {
+            button.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
+            );
+            button.setTextColor(Color.parseColor("#020B1A"));
+        }
+
+        buttons[value].setBackgroundTintList(
+                ColorStateList.valueOf(Color.parseColor("#FFC107"))
         );
-        rebateAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
-        spRebate.setAdapter(rebateAdapter);
+        buttons[value].setTextColor(Color.BLACK);
+
+        updatePreview();
     }
 
     private void loadExistingData() {
@@ -190,7 +195,7 @@ public class EditBillActivity extends AppCompatActivity {
                 }
             }
 
-            spRebate.setSelection(rebate);
+            selectRebate(rebate);
 
         } else {
             showInfoDialog(
@@ -228,14 +233,10 @@ public class EditBillActivity extends AppCompatActivity {
             return;
         }
 
-        int previewRebate = spRebate.getSelectedItemPosition();
-
         double previewTotal = calculateTotalCharges(previewUnit);
         previewTotal = Math.round(previewTotal * 100.0) / 100.0;
 
-        double previewFinal =
-                previewTotal - (previewTotal * previewRebate / 100.0);
-
+        double previewFinal = previewTotal - (previewTotal * rebate / 100.0);
         previewFinal = Math.round(previewFinal * 100.0) / 100.0;
 
         txtNewCost.setText(
@@ -293,7 +294,6 @@ public class EditBillActivity extends AppCompatActivity {
         }
 
         month = spMonth.getSelectedItem().toString();
-        rebate = spRebate.getSelectedItemPosition();
 
         totalCharges = calculateTotalCharges(unit);
         totalCharges = Math.round(totalCharges * 100.0) / 100.0;

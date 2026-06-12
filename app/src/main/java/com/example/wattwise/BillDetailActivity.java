@@ -15,7 +15,7 @@ import java.util.Locale;
 public class BillDetailActivity extends AppCompatActivity {
 
     TextView txtMonthYear, txtUnit, txtRebate, txtTotalCharges, txtFinalCost, txtRebateAmount;
-    Button btnEdit, btnDelete;
+    Button btnEdit, btnDelete, btnBackDashboard;
 
     DatabaseHelper databaseHelper;
     int billId = -1;
@@ -36,6 +36,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
         btnEdit = findViewById(R.id.btnEdit);
         btnDelete = findViewById(R.id.btnDelete);
+        btnBackDashboard = findViewById(R.id.btnBackDashboard);
 
         billId = getIntent().getIntExtra("BILL_ID", -1);
 
@@ -47,6 +48,7 @@ public class BillDetailActivity extends AppCompatActivity {
         loadBillDetail();
 
         btnEdit.setOnClickListener(v -> confirmEdit());
+        btnBackDashboard.setOnClickListener(v -> backToDashboard());
         btnDelete.setOnClickListener(v -> confirmDelete());
     }
 
@@ -99,6 +101,13 @@ public class BillDetailActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
         );
+    }
+
+    private void backToDashboard() {
+        Intent intent = new Intent(BillDetailActivity.this, DashboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
     }
 
     private void confirmDelete() {

@@ -146,13 +146,79 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <Spinner
-                android:id="@+id/spRebate"
+            <GridLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="@drawable/bg_input_box"
-                android:popupBackground="#071426"
-                android:layout_marginTop="8dp" />
+                android:layout_height="wrap_content"
+                android:columnCount="3"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnRebate0"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:text="0%"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:backgroundTint="#FFC107" />
+
+                <Button
+                    android:id="@+id/btnRebate1"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:text="1%"
+                    android:textStyle="bold"
+                    android:textColor="#020B1A"
+                    android:backgroundTint="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnRebate2"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:text="2%"
+                    android:textStyle="bold"
+                    android:textColor="#020B1A"
+                    android:backgroundTint="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnRebate3"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:text="3%"
+                    android:textStyle="bold"
+                    android:textColor="#020B1A"
+                    android:backgroundTint="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnRebate4"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:text="4%"
+                    android:textStyle="bold"
+                    android:textColor="#020B1A"
+                    android:backgroundTint="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnRebate5"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    android:text="5%"
+                    android:textStyle="bold"
+                    android:textColor="#020B1A"
+                    android:backgroundTint="#FFFFFF" />
+
+            </GridLayout>
 
         </LinearLayout>
 

@@ -3,6 +3,7 @@ package com.example.wattwise;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     ListView listHistory;
     TextView txtEmpty, txtTotalBills, txtAverageBill;
+    Button btnBackDashboard;
 
     DatabaseHelper databaseHelper;
 
@@ -34,6 +36,7 @@ public class HistoryActivity extends AppCompatActivity {
         txtEmpty = findViewById(R.id.txtEmpty);
         txtTotalBills = findViewById(R.id.txtTotalBills);
         txtAverageBill = findViewById(R.id.txtAverageBill);
+        btnBackDashboard = findViewById(R.id.btnBackDashboard);
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -46,6 +49,13 @@ public class HistoryActivity extends AppCompatActivity {
 
         loadSummary();
         loadHistory();
+
+        btnBackDashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
 
         listHistory.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(HistoryActivity.this, BillDetailActivity.class);
