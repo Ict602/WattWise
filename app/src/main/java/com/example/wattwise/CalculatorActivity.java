@@ -1,12 +1,14 @@
 package com.example.wattwise;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -89,7 +91,11 @@ public class CalculatorActivity extends AppCompatActivity {
         String unitText = etUnit.getText().toString().trim();
 
         if (unitText.isEmpty()) {
-            etUnit.setError("Please enter electricity unit used.");
+            showAutoDismissDialog(
+                    "⚠️",
+                    "Input Required",
+                    "Please enter electricity unit used."
+            );
             etUnit.requestFocus();
             return;
         }
@@ -97,13 +103,21 @@ public class CalculatorActivity extends AppCompatActivity {
         try {
             unit = Integer.parseInt(unitText);
         } catch (Exception e) {
-            etUnit.setError("Please enter a valid number.");
+            showAutoDismissDialog(
+                    "⚠️",
+                    "Invalid Input",
+                    "Please enter a valid number."
+            );
             etUnit.requestFocus();
             return;
         }
 
         if (unit < 1 || unit > 1000) {
-            etUnit.setError("Unit must be between 1 and 1000 kWh.");
+            showAutoDismissDialog(
+                    "⚠️",
+                    "Invalid Range",
+                    "Unit must be between 1 and 1000 kWh."
+            );
             etUnit.requestFocus();
             return;
         }
@@ -123,11 +137,11 @@ public class CalculatorActivity extends AppCompatActivity {
 
         isCalculated = true;
 
-        Toast.makeText(
-                this,
-                "Electricity bill calculated successfully",
-                Toast.LENGTH_SHORT
-        ).show();
+        showAutoDismissDialog(
+                "✅",
+                "Calculation Complete",
+                "Electricity bill calculated successfully."
+        );
     }
 
     private double calculateTotalCharges(int unit) {
@@ -144,16 +158,22 @@ public class CalculatorActivity extends AppCompatActivity {
 
     private void confirmSaveRecord() {
         if (!isCalculated) {
-            Toast.makeText(this, "Please calculate the bill first", Toast.LENGTH_SHORT).show();
+            showAutoDismissDialog(
+                    "⚠️",
+                    "Calculation Required",
+                    "Please calculate the bill before saving."
+            );
             return;
         }
 
-        new AlertDialog.Builder(this)
-                .setTitle("Save Record")
-                .setMessage("Are you sure you want to save this bill record?")
-                .setPositiveButton("Yes", (dialog, which) -> saveRecord())
-                .setNegativeButton("No", null)
-                .show();
+        showConfirmDialog(
+                "💾",
+                "Save Record",
+                "Are you sure you want to save this bill record?",
+                "Yes",
+                "No",
+                () -> saveRecord()
+        );
     }
 
     private void saveRecord() {
@@ -167,32 +187,34 @@ public class CalculatorActivity extends AppCompatActivity {
         );
 
         if (inserted) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Record Saved")
-                    .setMessage(
-                            "Your electricity bill record has been saved successfully.\n\n" +
-                                    "Month: " + selectedMonth + "\n" +
-                                    "Total Charges: RM " + String.format(Locale.US, "%.2f", totalCharges) + "\n" +
-                                    "Final Cost: RM " + String.format(Locale.US, "%.2f", finalCost)
-                    )
-                    .setPositiveButton("OK", (dialog, which) -> finish())
-                    .show();
+            showInfoDialog(
+                    "✅",
+                    "Record Saved",
+                    "Your electricity bill record has been saved successfully.\n\n" +
+                            "Month: " + selectedMonth + "\n" +
+                            "Total Charges: RM " + String.format(Locale.US, "%.2f", totalCharges) + "\n" +
+                            "Final Cost: RM " + String.format(Locale.US, "%.2f", finalCost),
+                    true
+            );
         } else {
-            new AlertDialog.Builder(this)
-                    .setTitle("Save Failed")
-                    .setMessage("Unable to save bill record.")
-                    .setPositiveButton("OK", null)
-                    .show();
+            showInfoDialog(
+                    "❌",
+                    "Save Failed",
+                    "Unable to save bill record.",
+                    false
+            );
         }
     }
 
     private void confirmResetForm() {
-        new AlertDialog.Builder(this)
-                .setTitle("Reset Form")
-                .setMessage("Are you sure you want to clear all fields?")
-                .setPositiveButton("Yes", (dialog, which) -> resetForm())
-                .setNegativeButton("No", null)
-                .show();
+        showConfirmDialog(
+                "🔄",
+                "Reset Form",
+                "Are you sure you want to clear all fields?",
+                "Yes",
+                "No",
+                () -> resetForm()
+        );
     }
 
     private void resetForm() {
@@ -213,6 +235,126 @@ public class CalculatorActivity extends AppCompatActivity {
 
         etUnit.clearFocus();
 
-        Toast.makeText(this, "Form reset successfully", Toast.LENGTH_SHORT).show();
+        showAutoDismissDialog(
+                "✅",
+                "Form Reset",
+                "All fields have been cleared."
+        );
+    }
+
+    private void showAutoDismissDialog(String icon, String title, String message) {
+        View view = getLayoutInflater().inflate(
+                R.layout.dialog_wattwise,
+                null
+        );
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnDialogOk = view.findViewById(R.id.btnDialogOk);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+
+        btnDialogOk.setVisibility(View.GONE);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }, 1800);
+    }
+
+    private void showInfoDialog(
+            String icon,
+            String title,
+            String message,
+            boolean closeAfterOk
+    ) {
+        View view = getLayoutInflater().inflate(
+                R.layout.dialog_wattwise,
+                null
+        );
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnDialogOk = view.findViewById(R.id.btnDialogOk);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnDialogOk.setOnClickListener(v -> {
+            dialog.dismiss();
+
+            if (closeAfterOk) {
+                finish();
+            }
+        });
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+    }
+
+    private void showConfirmDialog(
+            String icon,
+            String title,
+            String message,
+            String positiveText,
+            String negativeText,
+            Runnable positiveAction
+    ) {
+        View view = getLayoutInflater().inflate(
+                R.layout.dialog_confirm,
+                null
+        );
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnYes = view.findViewById(R.id.btnYes);
+        Button btnNo = view.findViewById(R.id.btnNo);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+        btnYes.setText(positiveText);
+        btnNo.setText(negativeText);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnYes.setOnClickListener(v -> {
+            dialog.dismiss();
+            positiveAction.run();
+        });
+
+        btnNo.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
     }
 }

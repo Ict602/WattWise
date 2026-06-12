@@ -15,7 +15,8 @@
 
         <activity android:name=".RegisterActivity" android:exported="false" />
         <activity android:name=".DashboardActivity" android:exported="false" />
-        <activity android:name=".MainActivity" android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".CalculatorActivity" android:exported="false" />
         <activity android:name=".HistoryActivity" android:exported="false" />
         <activity android:name=".BillDetailActivity" android:exported="false" />

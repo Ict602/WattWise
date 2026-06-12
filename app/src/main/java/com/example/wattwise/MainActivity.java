@@ -2,12 +2,13 @@ package com.example.wattwise;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,14 +59,20 @@ public class MainActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (email.isEmpty()) {
-            etEmail.setError("Please enter your email");
-            etEmail.requestFocus();
+            showWattWiseDialog(
+                    "📧",
+                    "Email Required",
+                    "Please enter your email address."
+            );
             return;
         }
 
         if (password.isEmpty()) {
-            etPassword.setError("Please enter your password");
-            etPassword.requestFocus();
+            showWattWiseDialog(
+                    "🔒",
+                    "Password Required",
+                    "Please enter your password."
+            );
             return;
         }
 
@@ -81,11 +88,40 @@ public class MainActivity extends AppCompatActivity {
             finish();
 
         } else {
-            Toast.makeText(
-                    MainActivity.this,
-                    "Invalid email or password",
-                    Toast.LENGTH_LONG
-            ).show();
+            showWattWiseDialog(
+                    "❌",
+                    "Login Failed",
+                    "Invalid email or password.\nPlease try again."
+            );
+        }
+    }
+
+    private void showWattWiseDialog(String icon, String title, String message) {
+
+        View view = getLayoutInflater().inflate(
+                R.layout.dialog_wattwise,
+                null
+        );
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnDialogOk = view.findViewById(R.id.btnDialogOk);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnDialogOk.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
     }
 }

@@ -4,12 +4,12 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,8 +66,12 @@ public class EditBillActivity extends AppCompatActivity {
         billId = getIntent().getIntExtra("BILL_ID", -1);
 
         if (billId == -1) {
-            Toast.makeText(this, "Invalid record", Toast.LENGTH_SHORT).show();
-            finish();
+            showInfoDialog(
+                    "❌",
+                    "Invalid Record",
+                    "This bill record is not valid.",
+                    true
+            );
             return;
         }
 
@@ -75,30 +79,69 @@ public class EditBillActivity extends AppCompatActivity {
         updatePreview();
 
         etUnit.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after
+            ) {
+            }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count
+            ) {
                 updatePreview();
             }
 
-            @Override public void afterTextChanged(Editable s) {}
-        });
-
-        spMonth.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
-                updatePreview();
+            @Override
+            public void afterTextChanged(Editable s) {
             }
-
-            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
         });
 
-        spRebate.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
-                updatePreview();
-            }
+        spMonth.setOnItemSelectedListener(
+                new android.widget.AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(
+                            android.widget.AdapterView<?> parent,
+                            android.view.View view,
+                            int position,
+                            long id
+                    ) {
+                        updatePreview();
+                    }
 
-            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
-        });
+                    @Override
+                    public void onNothingSelected(
+                            android.widget.AdapterView<?> parent
+                    ) {
+                    }
+                }
+        );
+
+        spRebate.setOnItemSelectedListener(
+                new android.widget.AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(
+                            android.widget.AdapterView<?> parent,
+                            android.view.View view,
+                            int position,
+                            long id
+                    ) {
+                        updatePreview();
+                    }
+
+                    @Override
+                    public void onNothingSelected(
+                            android.widget.AdapterView<?> parent
+                    ) {
+                    }
+                }
+        );
 
         btnUpdate.setOnClickListener(v -> confirmUpdate());
         btnCancel.setOnClickListener(v -> finish());
@@ -134,7 +177,9 @@ public class EditBillActivity extends AppCompatActivity {
 
             txtMonthBadge.setText(month.substring(0, 3).toUpperCase());
             txtCurrentRecord.setText(month + " " + currentYear);
-            txtCurrentCost.setText(String.format(Locale.US, "RM %.2f", oldFinalCost));
+            txtCurrentCost.setText(
+                    String.format(Locale.US, "RM %.2f", oldFinalCost)
+            );
 
             etUnit.setText(String.valueOf(unit));
 
@@ -148,8 +193,12 @@ public class EditBillActivity extends AppCompatActivity {
             spRebate.setSelection(rebate);
 
         } else {
-            Toast.makeText(this, "Record not found", Toast.LENGTH_SHORT).show();
-            finish();
+            showInfoDialog(
+                    "❌",
+                    "Record Not Found",
+                    "The selected bill record could not be found.",
+                    true
+            );
         }
 
         if (cursor != null) {
@@ -184,34 +233,61 @@ public class EditBillActivity extends AppCompatActivity {
         double previewTotal = calculateTotalCharges(previewUnit);
         previewTotal = Math.round(previewTotal * 100.0) / 100.0;
 
-        double previewFinal = previewTotal - (previewTotal * previewRebate / 100.0);
+        double previewFinal =
+                previewTotal - (previewTotal * previewRebate / 100.0);
+
         previewFinal = Math.round(previewFinal * 100.0) / 100.0;
 
-        txtNewCost.setText(String.format(Locale.US, "RM %.2f", previewFinal));
+        txtNewCost.setText(
+                String.format(Locale.US, "RM %.2f", previewFinal)
+        );
     }
 
     private void confirmUpdate() {
-        new AlertDialog.Builder(this)
-                .setTitle("Update Record")
-                .setMessage("Are you sure you want to update this bill record?")
-                .setPositiveButton("Yes", (dialog, which) -> updateRecord())
-                .setNegativeButton("No", null)
-                .show();
+        showConfirmDialog(
+                "📝",
+                "Update Record",
+                "Are you sure you want to update this bill record?",
+                "Yes",
+                "No",
+                () -> updateRecord()
+        );
     }
 
     private void updateRecord() {
         String unitText = etUnit.getText().toString().trim();
 
         if (unitText.isEmpty()) {
-            etUnit.setError("Please enter electricity unit used.");
+            showInfoDialog(
+                    "⚠️",
+                    "Unit Required",
+                    "Please enter electricity unit used.",
+                    false
+            );
             etUnit.requestFocus();
             return;
         }
 
-        unit = Integer.parseInt(unitText);
+        try {
+            unit = Integer.parseInt(unitText);
+        } catch (Exception e) {
+            showInfoDialog(
+                    "⚠️",
+                    "Invalid Unit",
+                    "Please enter a valid number.",
+                    false
+            );
+            etUnit.requestFocus();
+            return;
+        }
 
         if (unit < 1 || unit > 1000) {
-            etUnit.setError("Unit must be between 1 and 1000 kWh.");
+            showInfoDialog(
+                    "⚠️",
+                    "Invalid Range",
+                    "Unit must be between 1 and 1000 kWh.",
+                    false
+            );
             etUnit.requestFocus();
             return;
         }
@@ -236,13 +312,19 @@ public class EditBillActivity extends AppCompatActivity {
         );
 
         if (updated) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Success")
-                    .setMessage("Record updated successfully.")
-                    .setPositiveButton("OK", (dialog, which) -> finish())
-                    .show();
+            showInfoDialog(
+                    "✅",
+                    "Update Successful",
+                    "Bill record has been updated successfully.",
+                    true
+            );
         } else {
-            Toast.makeText(this, "Failed to update record", Toast.LENGTH_SHORT).show();
+            showInfoDialog(
+                    "❌",
+                    "Update Failed",
+                    "Failed to update bill record.",
+                    false
+            );
         }
     }
 
@@ -252,9 +334,100 @@ public class EditBillActivity extends AppCompatActivity {
         } else if (unit <= 300) {
             return (200 * 0.218) + ((unit - 200) * 0.334);
         } else if (unit <= 600) {
-            return (200 * 0.218) + (100 * 0.334) + ((unit - 300) * 0.516);
+            return (200 * 0.218)
+                    + (100 * 0.334)
+                    + ((unit - 300) * 0.516);
         } else {
-            return (200 * 0.218) + (100 * 0.334) + (300 * 0.516) + ((unit - 600) * 0.546);
+            return (200 * 0.218)
+                    + (100 * 0.334)
+                    + (300 * 0.516)
+                    + ((unit - 600) * 0.546);
+        }
+    }
+
+    private void showInfoDialog(
+            String icon,
+            String title,
+            String message,
+            boolean closeAfterOk
+    ) {
+        View view = getLayoutInflater().inflate(
+                R.layout.dialog_wattwise,
+                null
+        );
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnDialogOk = view.findViewById(R.id.btnDialogOk);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnDialogOk.setOnClickListener(v -> {
+            dialog.dismiss();
+
+            if (closeAfterOk) {
+                finish();
+            }
+        });
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(
+                    android.R.color.transparent
+            );
+        }
+    }
+
+    private void showConfirmDialog(
+            String icon,
+            String title,
+            String message,
+            String positiveText,
+            String negativeText,
+            Runnable positiveAction
+    ) {
+        View view = getLayoutInflater().inflate(
+                R.layout.dialog_confirm,
+                null
+        );
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnYes = view.findViewById(R.id.btnYes);
+        Button btnNo = view.findViewById(R.id.btnNo);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+        btnYes.setText(positiveText);
+        btnNo.setText(negativeText);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnYes.setOnClickListener(v -> {
+            dialog.dismiss();
+            positiveAction.run();
+        });
+
+        btnNo.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(
+                    android.R.color.transparent
+            );
         }
     }
 }

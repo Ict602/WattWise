@@ -3,9 +3,9 @@ package com.example.wattwise;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,8 +40,7 @@ public class BillDetailActivity extends AppCompatActivity {
         billId = getIntent().getIntExtra("BILL_ID", -1);
 
         if (billId == -1) {
-            Toast.makeText(this, "Invalid record", Toast.LENGTH_SHORT).show();
-            finish();
+            showInfoDialog("❌", "Invalid Record", "This bill record is not valid.", true);
             return;
         }
 
@@ -79,8 +78,7 @@ public class BillDetailActivity extends AppCompatActivity {
             txtFinalCost.setText(String.format(Locale.US, "RM %.2f", finalCost));
 
         } else {
-            Toast.makeText(this, "Record not found", Toast.LENGTH_SHORT).show();
-            finish();
+            showInfoDialog("❌", "Record Not Found", "The selected bill record could not be found.", true);
         }
 
         if (cursor != null) {
@@ -89,41 +87,119 @@ public class BillDetailActivity extends AppCompatActivity {
     }
 
     private void confirmEdit() {
-        new AlertDialog.Builder(this)
-                .setTitle("Edit Record")
-                .setMessage("Do you want to edit this bill record?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    Intent intent = new Intent(
-                            BillDetailActivity.this,
-                            EditBillActivity.class
-                    );
+        showConfirmDialog(
+                "✏️",
+                "Edit Record",
+                "Do you want to edit this bill record?",
+                "Yes",
+                "No",
+                () -> {
+                    Intent intent = new Intent(BillDetailActivity.this, EditBillActivity.class);
                     intent.putExtra("BILL_ID", billId);
                     startActivity(intent);
-                })
-                .setNegativeButton("No", null)
-                .show();
+                }
+        );
     }
 
     private void confirmDelete() {
-        new AlertDialog.Builder(this)
-                .setTitle("Delete Record")
-                .setMessage("Are you sure you want to delete this bill record?")
-                .setPositiveButton("Delete", (dialog, which) -> deleteRecord())
-                .setNegativeButton("Cancel", null)
-                .show();
+        showConfirmDialog(
+                "🗑️",
+                "Delete Record",
+                "Are you sure you want to delete this bill record?\n\nThis action cannot be undone.",
+                "Delete",
+                "Cancel",
+                () -> deleteRecord()
+        );
     }
 
     private void deleteRecord() {
         boolean deleted = databaseHelper.deleteBill(billId);
 
         if (deleted) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Success")
-                    .setMessage("Record deleted successfully.")
-                    .setPositiveButton("OK", (dialog, which) -> finish())
-                    .show();
+            showInfoDialog(
+                    "✅",
+                    "Record Deleted",
+                    "Bill record has been deleted successfully.",
+                    true
+            );
         } else {
-            Toast.makeText(this, "Failed to delete record", Toast.LENGTH_SHORT).show();
+            showInfoDialog(
+                    "❌",
+                    "Delete Failed",
+                    "Failed to delete bill record.",
+                    false
+            );
+        }
+    }
+
+    private void showInfoDialog(String icon, String title, String message, boolean closeAfterOk) {
+        View view = getLayoutInflater().inflate(R.layout.dialog_wattwise, null);
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnDialogOk = view.findViewById(R.id.btnDialogOk);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnDialogOk.setOnClickListener(v -> {
+            dialog.dismiss();
+
+            if (closeAfterOk) {
+                finish();
+            }
+        });
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+    }
+
+    private void showConfirmDialog(
+            String icon,
+            String title,
+            String message,
+            String positiveText,
+            String negativeText,
+            Runnable positiveAction
+    ) {
+        View view = getLayoutInflater().inflate(R.layout.dialog_confirm, null);
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnYes = view.findViewById(R.id.btnYes);
+        Button btnNo = view.findViewById(R.id.btnNo);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+        btnYes.setText(positiveText);
+        btnNo.setText(negativeText);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnYes.setOnClickListener(v -> {
+            dialog.dismiss();
+            positiveAction.run();
+        });
+
+        btnNo.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
     }
 }
