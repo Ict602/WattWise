@@ -1,11 +1,14 @@
 package com.example.wattwise;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -41,47 +44,148 @@ public class RegisterActivity extends AppCompatActivity {
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
         if (fullname.isEmpty()) {
-            etFullName.setError("Please enter full name");
-            etFullName.requestFocus();
+            showAutoDismissDialog(
+                    "👤",
+                    "Full Name Required",
+                    "Please enter your full name."
+            );
             return;
         }
 
         if (email.isEmpty()) {
-            etEmail.setError("Please enter email");
-            etEmail.requestFocus();
+            showAutoDismissDialog(
+                    "📧",
+                    "Email Required",
+                    "Please enter your email address."
+            );
             return;
         }
 
         if (password.isEmpty()) {
-            etPassword.setError("Please enter password");
-            etPassword.requestFocus();
+            showAutoDismissDialog(
+                    "🔒",
+                    "Password Required",
+                    "Please enter your password."
+            );
             return;
         }
 
         if (confirmPassword.isEmpty()) {
-            etConfirmPassword.setError("Please confirm password");
-            etConfirmPassword.requestFocus();
+            showAutoDismissDialog(
+                    "🔐",
+                    "Confirm Password",
+                    "Please confirm your password."
+            );
             return;
         }
 
         if (!password.equals(confirmPassword)) {
-            etConfirmPassword.setError("Password does not match");
-            etConfirmPassword.requestFocus();
+            showAutoDismissDialog(
+                    "⚠️",
+                    "Password Mismatch",
+                    "Password and Confirm Password do not match."
+            );
             return;
         }
 
         if (databaseHelper.checkEmailExists(email)) {
-            Toast.makeText(this, "Email already registered", Toast.LENGTH_SHORT).show();
+            showAutoDismissDialog(
+                    "❌",
+                    "Email Already Registered",
+                    "This email address has already been used."
+            );
             return;
         }
 
         boolean inserted = databaseHelper.insertUser(fullname, email, password);
 
         if (inserted) {
-            Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show();
-            finish();
+            showInfoDialog(
+                    "✅",
+                    "Account Created",
+                    "Your account has been created successfully.",
+                    true
+            );
         } else {
-            Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show();
+            showInfoDialog(
+                    "❌",
+                    "Registration Failed",
+                    "Unable to create your account. Please try again.",
+                    false
+            );
+        }
+    }
+
+    private void showAutoDismissDialog(String icon, String title, String message) {
+        View view = getLayoutInflater().inflate(
+                R.layout.dialog_wattwise,
+                null
+        );
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnDialogOk = view.findViewById(R.id.btnDialogOk);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+
+        btnDialogOk.setVisibility(View.GONE);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }, 1800);
+    }
+
+    private void showInfoDialog(
+            String icon,
+            String title,
+            String message,
+            boolean closeAfterOk
+    ) {
+        View view = getLayoutInflater().inflate(
+                R.layout.dialog_wattwise,
+                null
+        );
+
+        TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
+        TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
+        TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+        Button btnDialogOk = view.findViewById(R.id.btnDialogOk);
+
+        txtDialogIcon.setText(icon);
+        txtDialogTitle.setText(title);
+        txtDialogMessage.setText(message);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnDialogOk.setOnClickListener(v -> {
+            dialog.dismiss();
+
+            if (closeAfterOk) {
+                finish();
+            }
+        });
+
+        dialog.show();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
     }
 }
