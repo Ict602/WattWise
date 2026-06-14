@@ -14,7 +14,7 @@ The application helps users estimate their monthly electricity bills based on:
 
 Users can:
 
-- Login/Register
+- Landingpage
 - Calculate electricity bills
 - Save bill records
 - View bill history
