@@ -1,68 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="112dp"
+    android:layout_height="108dp"
+    android:background="@drawable/bg_light_card"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:background="@drawable/bg_dashboard_card"
-    android:padding="14dp"
-    android:gravity="center_vertical">
+    android:padding="12dp">
 
     <TextView
         android:id="@+id/txtMonthShort"
-        android:layout_width="62dp"
-        android:layout_height="62dp"
-        android:gravity="center"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
         android:background="@drawable/bg_month_circle"
-        android:text="JAN"
-        android:textColor="#000000"
-        android:textSize="18sp"
+        android:gravity="center"
+        android:text="AUG"
+        android:textColor="#1565C0"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginStart="12dp"
         android:layout_weight="1"
-        android:orientation="vertical"
         android:gravity="center_vertical"
-        android:paddingStart="14dp"
-        android:paddingEnd="8dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/txtMonthYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="January 2026"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp"
+            android:text="August 2026"
+            android:textColor="#1A1A1A"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtUsage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="690 kWh • 5% Rebate"
-            android:textColor="#C9D4E5"
-            android:textSize="13sp"
-            android:layout_marginTop="4dp" />
+            android:text="Electricity Usage Record"
+            android:textColor="#6B7280"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap to view details"
+            android:textColor="#9CA3AF"
+            android:textSize="11sp"
+            android:layout_marginTop="2dp" />
 
         <TextView
             android:id="@+id/txtAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RM 266.89"
-            android:textColor="#FFC107"
-            android:textSize="20sp"
+            android:text="RM 155.01"
+            android:textColor="#1565C0"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="4dp" />
 
     </LinearLayout>
 
     <TextView
-        android:layout_width="26dp"
+        android:layout_width="30dp"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="›"
-        android:textColor="#FFFFFF"
-        android:textSize="32sp" />
+        android:text="📄"
+        android:textSize="20sp" />
 
 </LinearLayout>

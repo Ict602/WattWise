@@ -1,368 +1,324 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#020B1A">
+    android:background="#F5F9FF"
+    android:orientation="vertical"
+    android:padding="28dp">
 
+    <!-- HEADER -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="358dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="18dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="About WattWise"
-            android:textColor="#C9D4E5"
-            android:textSize="18sp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="18dp" />
-
-        <!-- PROFILE CARD -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/bg_blue_card"
-            android:padding="18dp">
-
-            <ImageView
-                android:layout_width="115dp"
-                android:layout_height="115dp"
-                android:src="@drawable/azura"
-                android:scaleType="centerCrop"
-                android:background="@drawable/bg_circle"
-                android:padding="2dp"
-                android:layout_gravity="center_vertical" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#1E90FF"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:text="👤 Full Name"
-                    android:textColor="#4DA3FF"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:text="Azura Binti Jamaludin"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="9dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:text="🆔 Student ID"
-                    android:textColor="#4DA3FF"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:text="2022888198"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="9dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:text="🎓 Course"
-                    android:textColor="#4DA3FF"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:text="ICT602 - Mobile Application Development"
-                    android:textColor="#FFFFFF"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="9dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:text="🏛 Institution"
-                    android:textColor="#4DA3FF"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:text="Universiti Teknologi MARA (UiTM)"
-                    android:textColor="#FFFFFF"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- HOW TO USE CARD -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_purple_card"
-            android:padding="18dp"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:text="📋 How To Use WattWise"
-                android:textColor="#C084FC"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
-
-                <!-- LEFT COLUMN -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:text="①  👤  Login to WattWise"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingBottom="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:text="②  🧮  Go to Calculator"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingBottom="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:text="③  📅  Select Month"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingBottom="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:text="④  ⚡  Enter Units Used"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingBottom="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:text="⑤  %  Choose Rebate"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#7C3AED"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp" />
-
-                <!-- RIGHT COLUMN -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:text="⑥  🧮  Tap Calculate"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingBottom="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:text="⑦  💾  Save Record"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingBottom="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:text="⑧  📋  View History"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingBottom="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:text="⑨  ✏️  Edit or Delete Record"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- GITHUB CARD -->
-        <LinearLayout
-            android:id="@+id/btnGithub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_blue_card"
-            android:padding="18dp"
-            android:layout_marginTop="16dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <TextView
-                android:text="🌐 Application Website (GitHub)"
-                android:textColor="#4DA3FF"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:text="Tap to open the application website:"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/txtGithub"
-                android:text="https://github.com/Ict602/WattWise"
-                android:textColor="#4DA3FF"
-                android:textSize="14sp"
-                android:layout_marginTop="6dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <!-- COPYRIGHT CARD -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_yellow_card"
-            android:padding="18dp"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:text="🛡 Copyright"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:text="© 2026 Azura Binti Jamaludin\nAll rights reserved.\nICT602 Mobile Application Development"
-                android:textColor="#111827"
-                android:textSize="14sp"
-                android:lineSpacingExtra="5dp"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-    <!-- LOGOUT CARD -->
-    <LinearLayout
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_light_header"
         android:gravity="center_vertical"
-        android:background="@drawable/bg_red_card"
-        android:padding="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="28dp"
-        android:clickable="true"
-        android:focusable="true">
+        android:orientation="horizontal"
+        android:padding="20dp">
 
         <TextView
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:text="🚪"
-            android:textSize="28sp"
-            android:gravity="center" />
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="ℹ️"
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center_vertical"
-            android:layout_marginStart="10dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Logout"
-                android:textColor="#FF4D4D"
-                android:textSize="18sp"
+                android:text="About WattWise"
+                android:textColor="#FFFFFF"
+                android:textSize="23sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign out from WattWise"
-                android:textColor="#FFFFFF"
-                android:textSize="13sp"
-                android:layout_marginTop="3dp" />
+                android:text="App information and guide"
+                android:textColor="#EAF2FF"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- PROFILE -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="188dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_light_card"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="14dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/azura"
+            app:civ_border_color="#1565C0"
+            app:civ_border_width="3dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="👤 Azura Binti Jamaludin"
+                android:textColor="#1A1A1A"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="🆔 2022888198"
+                android:textColor="#1A1A1A"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="🎓 ICT602"
+                android:textColor="#1A1A1A"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Mobile Technology and Development"
+                android:textColor="#1565C0"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- HOW TO USE -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="182dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_light_card"
+        android:orientation="vertical"
+        android:padding="13dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📋 How To Use WattWise"
+            android:textColor="#1565C0"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="111dp"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <!-- LEFT COLUMN -->
+            <LinearLayout
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="① 🗓️ Select month"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="② ⚡ Enter consumption"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="③ 🎚️ Select rebate"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="④ 🧮 Calculate bill"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- RIGHT COLUMN -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="97dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⑤ 💾 Save record"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="⑥ 📂 View history"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="⑦ ✏️ Edit/Delete"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
+    </LinearLayout>
+
+    <!-- GITHUB -->
+    <LinearLayout
+        android:id="@+id/btnGithub"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_light_card"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:padding="13dp">
+
         <TextView
-            android:layout_width="26dp"
-            android:layout_height="match_parent"
-            android:text="›"
-            android:textColor="#FF4D4D"
-            android:textSize="32sp"
-            android:gravity="center" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🌐 Project Repository"
+            android:textColor="#1565C0"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="GitHub Source Code"
+            android:textColor="#1A1A1A"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtGithub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="https://github.com/Ict602/WattWise"
+            android:textColor="#1565C0"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Tap here to open project repository"
+            android:textColor="#6B7280"
+            android:textSize="11sp" />
 
     </LinearLayout>
+
+    <!-- FOOTER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_light_card"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="© 2026 Azura Binti Jamaludin"
+                android:textColor="#1A1A1A"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="ICT602 Project • Version 1.0"
+                android:textColor="#6B7280"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="11dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/btnLogout"
+            android:layout_width="98dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_light_red_card"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🚪"
+                android:textSize="22sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textColor="#D32F2F"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
-</ScrollView>
+
+</LinearLayout>

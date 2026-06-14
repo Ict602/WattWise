@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,7 +54,7 @@ public class AboutActivity extends AppCompatActivity {
                 "Are you sure you want to logout from WattWise?",
                 "Logout",
                 "Cancel",
-                () -> logoutUser()
+                this::logoutUser
         );
     }
 
@@ -76,7 +75,9 @@ public class AboutActivity extends AppCompatActivity {
 
         txtDialogIcon.setText("✅");
         txtDialogTitle.setText("Logged Out");
-        txtDialogMessage.setText("You have successfully logged out from WattWise.");
+        txtDialogMessage.setText(
+                "You have successfully logged out from WattWise."
+        );
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(view)
@@ -85,8 +86,16 @@ public class AboutActivity extends AppCompatActivity {
         btnDialogOk.setOnClickListener(v -> {
             dialog.dismiss();
 
-            Intent intent = new Intent(AboutActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent intent = new Intent(
+                    AboutActivity.this,
+                    LandingActivity.class
+            );
+
+            intent.setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+            );
+
             startActivity(intent);
             finish();
         });
@@ -94,11 +103,17 @@ public class AboutActivity extends AppCompatActivity {
         dialog.show();
 
         if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setBackgroundDrawableResource(
+                    android.R.color.transparent
+            );
         }
     }
 
-    private void showInfoDialog(String icon, String title, String message) {
+    private void showInfoDialog(
+            String icon,
+            String title,
+            String message
+    ) {
         View view = getLayoutInflater().inflate(
                 R.layout.dialog_wattwise,
                 null
@@ -122,7 +137,9 @@ public class AboutActivity extends AppCompatActivity {
         dialog.show();
 
         if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setBackgroundDrawableResource(
+                    android.R.color.transparent
+            );
         }
     }
 
@@ -165,7 +182,9 @@ public class AboutActivity extends AppCompatActivity {
         dialog.show();
 
         if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setBackgroundDrawableResource(
+                    android.R.color.transparent
+            );
         }
     }
 }

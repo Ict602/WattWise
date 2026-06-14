@@ -15,7 +15,7 @@ import java.util.Locale;
 public class BillDetailActivity extends AppCompatActivity {
 
     TextView txtMonthYear, txtUnit, txtRebate, txtTotalCharges, txtFinalCost, txtRebateAmount;
-    Button btnEdit, btnDelete, btnBackDashboard;
+    Button btnEdit, btnDelete, btnBackHistory;
 
     DatabaseHelper databaseHelper;
     int billId = -1;
@@ -36,7 +36,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
         btnEdit = findViewById(R.id.btnEdit);
         btnDelete = findViewById(R.id.btnDelete);
-        btnBackDashboard = findViewById(R.id.btnBackDashboard);
+        btnBackHistory = findViewById(R.id.btnBackHistory);
 
         billId = getIntent().getIntExtra("BILL_ID", -1);
 
@@ -48,14 +48,21 @@ public class BillDetailActivity extends AppCompatActivity {
         loadBillDetail();
 
         btnEdit.setOnClickListener(v -> confirmEdit());
-        btnBackDashboard.setOnClickListener(v -> backToDashboard());
         btnDelete.setOnClickListener(v -> confirmDelete());
+        btnBackHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(BillDetailActivity.this, HistoryActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadBillDetail();
+        if (billId != -1) {
+            loadBillDetail();
+        }
     }
 
     private void loadBillDetail() {
@@ -70,11 +77,10 @@ public class BillDetailActivity extends AppCompatActivity {
             double finalCost = cursor.getDouble(6);
 
             double rebateAmount = totalCharges - finalCost;
-            rebateAmount = Math.round(rebateAmount * 100.0) / 100.0;
 
             txtMonthYear.setText(month + " " + year);
             txtUnit.setText(unit + " kWh");
-            txtRebate.setText(rebate + "% Rebate");
+            txtRebate.setText(rebate + "%");
             txtTotalCharges.setText(String.format(Locale.US, "RM %.2f", totalCharges));
             txtRebateAmount.setText(String.format(Locale.US, "-RM %.2f", rebateAmount));
             txtFinalCost.setText(String.format(Locale.US, "RM %.2f", finalCost));
@@ -93,21 +99,14 @@ public class BillDetailActivity extends AppCompatActivity {
                 "✏️",
                 "Edit Record",
                 "Do you want to edit this bill record?",
-                "Yes",
-                "No",
+                "Edit",
+                "Cancel",
                 () -> {
                     Intent intent = new Intent(BillDetailActivity.this, EditBillActivity.class);
                     intent.putExtra("BILL_ID", billId);
                     startActivity(intent);
                 }
         );
-    }
-
-    private void backToDashboard() {
-        Intent intent = new Intent(BillDetailActivity.this, DashboardActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
     }
 
     private void confirmDelete() {
@@ -117,7 +116,7 @@ public class BillDetailActivity extends AppCompatActivity {
                 "Are you sure you want to delete this bill record?\n\nThis action cannot be undone.",
                 "Delete",
                 "Cancel",
-                () -> deleteRecord()
+                this::deleteRecord
         );
     }
 
@@ -161,6 +160,9 @@ public class BillDetailActivity extends AppCompatActivity {
             dialog.dismiss();
 
             if (closeAfterOk) {
+                Intent intent = new Intent(BillDetailActivity.this, HistoryActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 finish();
             }
         });

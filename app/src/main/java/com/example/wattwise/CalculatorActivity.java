@@ -1,17 +1,15 @@
 package com.example.wattwise;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
-import android.content.Intent;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,21 +19,25 @@ import java.util.Locale;
 
 public class CalculatorActivity extends AppCompatActivity {
 
-    Spinner spMonth;
+    RadioButton rbJan, rbFeb, rbMar, rbApr, rbMay, rbJun;
+    RadioButton rbJul, rbAug, rbSep, rbOct, rbNov, rbDec;
+
     EditText etUnit;
+    SeekBar seekRebate;
 
-    Button btnCalculate, btnReset, btnSave, btnDashboard;
-    Button btnRebate0, btnRebate1, btnRebate2, btnRebate3, btnRebate4, btnRebate5;
+    TextView txtRebateLabel, txtTotalCharges, txtFinalCost, txtFinalNote;
 
-    TextView txtTotalCharges, txtFinalCost, txtFinalNote;
+    Button btnCalculate, btnReset, btnSave, btnHistory, btnAbout, btnLogout;
 
     DatabaseHelper databaseHelper;
 
     double totalCharges = 0.0;
     double finalCost = 0.0;
+
     int selectedRebate = 0;
     int unit = 0;
     int currentYear = 0;
+
     String selectedMonth = "";
 
     boolean isCalculated = false;
@@ -46,136 +48,173 @@ public class CalculatorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calculator);
 
         databaseHelper = new DatabaseHelper(this);
+        currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        spMonth = findViewById(R.id.spMonth);
+        rbJan = findViewById(R.id.rbJan);
+        rbFeb = findViewById(R.id.rbFeb);
+        rbMar = findViewById(R.id.rbMar);
+        rbApr = findViewById(R.id.rbApr);
+        rbMay = findViewById(R.id.rbMay);
+        rbJun = findViewById(R.id.rbJun);
+        rbJul = findViewById(R.id.rbJul);
+        rbAug = findViewById(R.id.rbAug);
+        rbSep = findViewById(R.id.rbSep);
+        rbOct = findViewById(R.id.rbOct);
+        rbNov = findViewById(R.id.rbNov);
+        rbDec = findViewById(R.id.rbDec);
+
         etUnit = findViewById(R.id.etUnit);
+        seekRebate = findViewById(R.id.seekRebate);
 
-        btnCalculate = findViewById(R.id.btnCalculate);
-        btnReset = findViewById(R.id.btnReset);
-        btnSave = findViewById(R.id.btnSave);
-        btnDashboard = findViewById(R.id.btnDashboard);
-
-        btnRebate0 = findViewById(R.id.btnRebate0);
-        btnRebate1 = findViewById(R.id.btnRebate1);
-        btnRebate2 = findViewById(R.id.btnRebate2);
-        btnRebate3 = findViewById(R.id.btnRebate3);
-        btnRebate4 = findViewById(R.id.btnRebate4);
-        btnRebate5 = findViewById(R.id.btnRebate5);
-
+        txtRebateLabel = findViewById(R.id.txtRebateLabel);
         txtTotalCharges = findViewById(R.id.txtTotalCharges);
         txtFinalCost = findViewById(R.id.txtFinalCost);
         txtFinalNote = findViewById(R.id.txtFinalNote);
 
-        currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        btnCalculate = findViewById(R.id.btnCalculate);
+        btnReset = findViewById(R.id.btnReset);
+        btnSave = findViewById(R.id.btnSave);
+        btnHistory = findViewById(R.id.btnHistory);
+        btnAbout = findViewById(R.id.btnAbout);
+        btnLogout = findViewById(R.id.btnLogout);
 
-        setupMonthSpinner();
-        setupRebateButtons();
+        rbJan.setChecked(true);
+        selectedMonth = "January";
+
+        setupMonthSelection();
+        setupRebateSlider();
 
         btnCalculate.setOnClickListener(v -> calculateBill());
         btnSave.setOnClickListener(v -> confirmSaveRecord());
         btnReset.setOnClickListener(v -> confirmResetForm());
-        btnDashboard.setOnClickListener(v -> {
-            Intent intent = new Intent(
-                    CalculatorActivity.this,
-                    DashboardActivity.class
-            );
 
-            intent.setFlags(
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP
-            );
-
-            startActivity(intent);
-            finish();
+        btnHistory.setOnClickListener(v -> {
+            showAutoDismissDialog("📋", "Opening History", "Loading saved bill records...");
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                startActivity(new Intent(CalculatorActivity.this, HistoryActivity.class));
+            }, 900);
         });
-    }
 
-    private void setupMonthSpinner() {
-        String[] months = {
+        btnAbout.setOnClickListener(v -> {
+            showAutoDismissDialog("ℹ️", "Opening About", "Loading application information...");
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                startActivity(new Intent(CalculatorActivity.this, AboutActivity.class));
+            }, 900);
+        });
+
+        btnLogout.setOnClickListener(v -> confirmLogout());
+    }
+    private void setupMonthSelection() {
+        RadioButton[] monthButtons = {
+                rbJan, rbFeb, rbMar, rbApr, rbMay, rbJun,
+                rbJul, rbAug, rbSep, rbOct, rbNov, rbDec
+        };
+
+        String[] monthNames = {
                 "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
         };
 
-        ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(
-                this,
-                R.layout.spinner_selected,
-                months
-        );
+        for (int i = 0; i < monthButtons.length; i++) {
+            int index = i;
 
-        monthAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
-        spMonth.setAdapter(monthAdapter);
-    }
+            monthButtons[i].setOnClickListener(v -> {
+                for (RadioButton rb : monthButtons) {
+                    rb.setChecked(false);
+                }
 
-    private void setupRebateButtons() {
-        btnRebate0.setOnClickListener(v -> selectRebate(0));
-        btnRebate1.setOnClickListener(v -> selectRebate(1));
-        btnRebate2.setOnClickListener(v -> selectRebate(2));
-        btnRebate3.setOnClickListener(v -> selectRebate(3));
-        btnRebate4.setOnClickListener(v -> selectRebate(4));
-        btnRebate5.setOnClickListener(v -> selectRebate(5));
+                monthButtons[index].setChecked(true);
+                selectedMonth = monthNames[index];
+                isCalculated = false;
 
-        selectRebate(0);
-    }
-
-    private void selectRebate(int rebate) {
-        selectedRebate = rebate;
-
-        Button[] buttons = {
-                btnRebate0, btnRebate1, btnRebate2,
-                btnRebate3, btnRebate4, btnRebate5
-        };
-
-        for (Button button : buttons) {
-            button.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
-            );
-            button.setTextColor(Color.parseColor("#020B1A"));
+            });
         }
-
-        buttons[rebate].setBackgroundTintList(
-                ColorStateList.valueOf(Color.parseColor("#FFC107"))
-        );
-        buttons[rebate].setTextColor(Color.BLACK);
-
-        isCalculated = false;
     }
 
+    private void setupRebateSlider() {
+        seekRebate.setMax(5);
+        seekRebate.setProgress(0);
+        txtRebateLabel.setText("Rebate: 0%");
+
+        seekRebate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                selectedRebate = progress;
+                txtRebateLabel.setText("Selected Rebate: " + selectedRebate + "%");
+                isCalculated = false;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+    }
     private void calculateBill() {
+
         String unitText = etUnit.getText().toString().trim();
 
+        if (selectedMonth.isEmpty()) {
+
+            showInfoDialog(
+                    "⚠️",
+                    "Month Required",
+                    "Please select a month first.",
+                    false
+            );
+
+            return;
+        }
+
         if (unitText.isEmpty()) {
-            showAutoDismissDialog(
+
+            showInfoDialog(
                     "⚠️",
                     "Input Required",
-                    "Please enter electricity unit used."
+                    "Please enter electricity unit used.",
+                    false
             );
+
             etUnit.requestFocus();
             return;
         }
 
         try {
+
             unit = Integer.parseInt(unitText);
+
         } catch (Exception e) {
-            showAutoDismissDialog(
+
+            showInfoDialog(
                     "⚠️",
                     "Invalid Input",
-                    "Please enter a valid number."
+                    "Please enter numbers only.",
+                    false
             );
+
+            etUnit.setText("0");
             etUnit.requestFocus();
+
             return;
         }
 
         if (unit < 1 || unit > 1000) {
-            showAutoDismissDialog(
+
+            showInfoDialog(
                     "⚠️",
-                    "Invalid Range",
-                    "Unit must be between 1 and 1000 kWh."
+                    "Invalid Consumption",
+                    "Electricity consumption must be between 1 and 1000 kWh.",
+                    false
             );
+
+            etUnit.setText("0");
             etUnit.requestFocus();
+
             return;
         }
-
-        selectedMonth = spMonth.getSelectedItem().toString();
 
         totalCharges = calculateTotalCharges(unit);
         totalCharges = Math.round(totalCharges * 100.0) / 100.0;
@@ -183,16 +222,28 @@ public class CalculatorActivity extends AppCompatActivity {
         finalCost = totalCharges - (totalCharges * selectedRebate / 100.0);
         finalCost = Math.round(finalCost * 100.0) / 100.0;
 
-        txtTotalCharges.setText(String.format(Locale.US, "RM %.2f", totalCharges));
-        txtFinalCost.setText(String.format(Locale.US, "RM %.2f", finalCost));
-        txtFinalNote.setText("After " + selectedRebate + "% rebate");
+        txtTotalCharges.setText(
+                String.format(Locale.US, "RM %.2f", totalCharges)
+        );
+
+        txtFinalCost.setText(
+                String.format(Locale.US, "RM %.2f", finalCost)
+        );
+
+        txtFinalNote.setText(
+                "After " + selectedRebate + "% rebate"
+        );
 
         isCalculated = true;
 
-        showAutoDismissDialog(
+        showInfoDialog(
                 "✅",
                 "Calculation Complete",
-                "Electricity bill calculated successfully."
+                "Total Charges: RM "
+                        + String.format(Locale.US, "%.2f", totalCharges)
+                        + "\nFinal Cost: RM "
+                        + String.format(Locale.US, "%.2f", finalCost),
+                false
         );
     }
 
@@ -202,12 +253,16 @@ public class CalculatorActivity extends AppCompatActivity {
         } else if (unit <= 300) {
             return (200 * 0.218) + ((unit - 200) * 0.334);
         } else if (unit <= 600) {
-            return (200 * 0.218) + (100 * 0.334) + ((unit - 300) * 0.516);
+            return (200 * 0.218)
+                    + (100 * 0.334)
+                    + ((unit - 300) * 0.516);
         } else {
-            return (200 * 0.218) + (100 * 0.334) + (300 * 0.516) + ((unit - 600) * 0.546);
+            return (200 * 0.218)
+                    + (100 * 0.334)
+                    + (300 * 0.516)
+                    + ((unit - 600) * 0.546);
         }
     }
-
     private void confirmSaveRecord() {
         if (!isCalculated) {
             showAutoDismissDialog(
@@ -222,9 +277,9 @@ public class CalculatorActivity extends AppCompatActivity {
                 "💾",
                 "Save Record",
                 "Are you sure you want to save this bill record?",
-                "Yes",
-                "No",
-                () -> saveRecord()
+                "Save",
+                "Cancel",
+                this::saveRecord
         );
     }
 
@@ -242,10 +297,10 @@ public class CalculatorActivity extends AppCompatActivity {
             showInfoDialog(
                     "✅",
                     "Record Saved",
-                    "Your electricity bill record has been saved successfully.\n\n" +
-                            "Month: " + selectedMonth + "\n" +
-                            "Final Cost: RM " + String.format(Locale.US, "%.2f", finalCost),
-                    true
+                    "Your electricity bill record has been saved successfully.\n\n"
+                            + "Month: " + selectedMonth + "\n"
+                            + "Final Cost: RM " + String.format(Locale.US, "%.2f", finalCost),
+                    false
             );
         } else {
             showInfoDialog(
@@ -262,16 +317,29 @@ public class CalculatorActivity extends AppCompatActivity {
                 "🔄",
                 "Reset Form",
                 "Are you sure you want to clear all fields?",
-                "Yes",
-                "No",
-                () -> resetForm()
+                "Reset",
+                "Cancel",
+                this::resetForm
         );
     }
 
     private void resetForm() {
+        rbJan.setChecked(true);
+        selectedMonth = "January";
+
+        RadioButton[] monthButtons = {
+                rbFeb, rbMar, rbApr, rbMay, rbJun,
+                rbJul, rbAug, rbSep, rbOct, rbNov, rbDec
+        };
+
+        for (RadioButton rb : monthButtons) {
+            rb.setChecked(false);
+        }
+
         etUnit.setText("");
-        spMonth.setSelection(0);
-        selectRebate(0);
+        seekRebate.setProgress(0);
+        selectedRebate = 0;
+        txtRebateLabel.setText("Rebate: 0%");
 
         txtTotalCharges.setText("RM 0.00");
         txtFinalCost.setText("RM 0.00");
@@ -279,9 +347,7 @@ public class CalculatorActivity extends AppCompatActivity {
 
         totalCharges = 0.0;
         finalCost = 0.0;
-        selectedRebate = 0;
         unit = 0;
-        selectedMonth = "";
         isCalculated = false;
 
         etUnit.clearFocus();
@@ -293,11 +359,23 @@ public class CalculatorActivity extends AppCompatActivity {
         );
     }
 
-    private void showAutoDismissDialog(String icon, String title, String message) {
-        View view = getLayoutInflater().inflate(
-                R.layout.dialog_wattwise,
-                null
+    private void confirmLogout() {
+        showConfirmDialog(
+                "🚪",
+                "Logout WattWise",
+                "Are you sure you want to logout from WattWise?",
+                "Logout",
+                "Cancel",
+                () -> {
+                    Intent intent = new Intent(CalculatorActivity.this, LandingActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
         );
+    }
+    private void showAutoDismissDialog(String icon, String title, String message) {
+        View view = getLayoutInflater().inflate(R.layout.dialog_wattwise, null);
 
         TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
         TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
@@ -307,7 +385,6 @@ public class CalculatorActivity extends AppCompatActivity {
         txtDialogIcon.setText(icon);
         txtDialogTitle.setText(title);
         txtDialogMessage.setText(message);
-
         btnDialogOk.setVisibility(View.GONE);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
@@ -324,7 +401,7 @@ public class CalculatorActivity extends AppCompatActivity {
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
-        }, 1800);
+        }, 1300);
     }
 
     private void showInfoDialog(
@@ -346,6 +423,7 @@ public class CalculatorActivity extends AppCompatActivity {
         txtDialogIcon.setText(icon);
         txtDialogTitle.setText(title);
         txtDialogMessage.setText(message);
+        btnDialogOk.setVisibility(View.VISIBLE);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(view)
@@ -362,10 +440,11 @@ public class CalculatorActivity extends AppCompatActivity {
         dialog.show();
 
         if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setBackgroundDrawableResource(
+                    android.R.color.transparent
+            );
         }
     }
-
     private void showConfirmDialog(
             String icon,
             String title,
@@ -374,10 +453,7 @@ public class CalculatorActivity extends AppCompatActivity {
             String negativeText,
             Runnable positiveAction
     ) {
-        View view = getLayoutInflater().inflate(
-                R.layout.dialog_confirm,
-                null
-        );
+        View view = getLayoutInflater().inflate(R.layout.dialog_confirm, null);
 
         TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
         TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);

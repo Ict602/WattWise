@@ -16,7 +16,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     ListView listHistory;
     TextView txtEmpty, txtTotalBills, txtAverageBill;
-    Button btnBackDashboard;
+    Button btnBackCalculator;
 
     DatabaseHelper databaseHelper;
 
@@ -36,7 +36,7 @@ public class HistoryActivity extends AppCompatActivity {
         txtEmpty = findViewById(R.id.txtEmpty);
         txtTotalBills = findViewById(R.id.txtTotalBills);
         txtAverageBill = findViewById(R.id.txtAverageBill);
-        btnBackDashboard = findViewById(R.id.btnBackDashboard);
+        btnBackCalculator = findViewById(R.id.btnBackCalculator);
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -50,8 +50,8 @@ public class HistoryActivity extends AppCompatActivity {
         loadSummary();
         loadHistory();
 
-        btnBackDashboard.setOnClickListener(v -> {
-            Intent intent = new Intent(HistoryActivity.this, DashboardActivity.class);
+        btnBackCalculator.setOnClickListener(v -> {
+            Intent intent = new Intent(HistoryActivity.this, CalculatorActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
@@ -125,7 +125,6 @@ public class HistoryActivity extends AppCompatActivity {
             }
 
             cursor.close();
-
         } else {
             txtEmpty.setText("No saved record yet.");
         }

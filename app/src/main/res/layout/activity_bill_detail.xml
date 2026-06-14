@@ -1,318 +1,310 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#020B1A">
+    android:background="#F5F9FF"
+    android:orientation="vertical"
+    android:padding="30dp">
 
+    <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <!-- HEADER -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="⚡ WattWise"
-            android:textColor="#FFFFFF"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal" />
+        android:layout_height="138dp"
+        android:background="@drawable/bg_light_header"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="28dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bill Details"
-            android:textColor="#C9D4E5"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp" />
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="🧾"
+            android:textSize="30sp" />
 
-        <!-- MONTH HERO CARD -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="115dp"
-            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
             android:gravity="center_vertical"
-            android:background="@drawable/bg_blue_card"
-            android:padding="18dp">
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="68dp"
-                android:layout_height="68dp"
-                android:text="⚡"
-                android:textSize="38sp"
-                android:gravity="center" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bill Details"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View selected electricity record"
+                android:textColor="#EAF2FF"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- MONTH RECORD -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_light_card"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="14dp">
+
+        <TextView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_month_circle"
+            android:gravity="center"
+            android:text="⚡"
+            android:textSize="28sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MONTH RECORD"
+                android:textColor="#6B7280"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtMonthYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="January"
+                android:textColor="#1565C0"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- UNIT AND REBATE -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_light_card"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Units Used"
+                android:textColor="#6B7280"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 kWh"
+                android:textColor="#1565C0"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_light_card"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rebate"
+                android:textColor="#6B7280"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtRebate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textColor="#1565C0"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- BILLING DETAILS -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="176dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_light_card"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Billing Details"
+            android:textColor="#1565C0"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:layout_marginStart="14dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="MONTH RECORD"
-                    android:textColor="#4DA3FF"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtMonthYear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="January 2026"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- USAGE DETAILS CARD -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_dashboard_card"
-            android:padding="18dp"
-            android:layout_marginTop="16dp">
+                android:text="Total Charges"
+                android:textColor="#6B7280"
+                android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/txtTotalCharges"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="⚡ Usage Information"
-                android:textColor="#FFC107"
-                android:textSize="18sp"
+                android:text="RM 0.00"
+                android:textColor="#1565C0"
+                android:textSize="20sp"
                 android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="92dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="14dp">
-
-                <!-- UNITS CARD -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/bg_blue_card"
-                    android:padding="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Units Used"
-                        android:textColor="#C9D4E5"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtUnit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0 kWh"
-                        android:textColor="#FFFFFF"
-                        android:textSize="21sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="6dp" />
-
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="12dp"
-                    android:layout_height="match_parent" />
-
-                <!-- REBATE CARD -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/bg_purple_card"
-                    android:padding="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rebate"
-                        android:textColor="#C9D4E5"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtRebate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0%"
-                        android:textColor="#FFFFFF"
-                        android:textSize="21sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="6dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
         </LinearLayout>
 
-        <!-- BILLING DETAILS CARD -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DCEBFF" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_dashboard_card"
-            android:padding="18dp"
-            android:layout_marginTop="16dp">
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rebate Amount"
+                android:textColor="#6B7280"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/txtRebateAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🧾 Billing Details"
-                android:textColor="#FFC107"
-                android:textSize="18sp"
+                android:text="-RM 0.00"
+                android:textColor="#1565C0"
+                android:textSize="20sp"
                 android:textStyle="bold" />
-
-            <!-- TOTAL CHARGES -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="68dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="14dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Total Charges"
-                    android:textColor="#C9D4E5"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/txtTotalCharges"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="RM 0.00"
-                    android:textColor="#FFFFFF"
-                    android:textSize="21sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#1E90FF" />
-
-            <!-- REBATE AMOUNT -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="68dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Rebate Amount"
-                    android:textColor="#C9D4E5"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/txtRebateAmount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-RM 0.00"
-                    android:textColor="#76FF7A"
-                    android:textSize="21sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#1E90FF" />
-
-            <!-- FINAL COST HERO -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/bg_green_card"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="14dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Final Cost"
-                    android:textColor="#C9D4E5"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtFinalCost"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="RM 0.00"
-                    android:textColor="#76FF7A"
-                    android:textSize="34sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
         </LinearLayout>
+    </LinearLayout>
 
-        <!-- ACTION BUTTONS -->
+    <!-- FINAL COST -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_light_card"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Final Cost"
+            android:textColor="#6B7280"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtFinalCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RM 0.00"
+            android:textColor="#1565C0"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+
+    <!-- ACTION BUTTONS -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/btnEdit"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="✏️ EDIT RECORD"
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:backgroundTint="#FFC107"
-            android:layout_marginTop="18dp" />
-
-        <Button
-            android:id="@+id/btnBackDashboard"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="🏠 BACK TO DASHBOARD"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="#1565C0"
+            android:text="✏️ EDIT"
             android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:backgroundTint="#1E90FF"
-            android:layout_marginTop="12dp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
 
         <Button
             android:id="@+id/btnDelete"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="🗑 DELETE RECORD"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="#D32F2F"
+            android:text="🗑 DELETE"
             android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:backgroundTint="#EF4444"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="30dp" />
-
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-</ScrollView>
+    <Button
+        android:id="@+id/btnBackHistory"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#1565C0"
+        android:text="← BACK TO HISTORY"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

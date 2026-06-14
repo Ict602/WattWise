@@ -18,10 +18,11 @@ public class LandingActivity extends AppCompatActivity {
         btnStart = findViewById(R.id.btnStart);
 
         btnStart.setOnClickListener(v -> {
-            startActivity(new Intent(
+            Intent intent = new Intent(
                     LandingActivity.this,
-                    MainActivity.class
-            ));
+                    CalculatorActivity.class
+            );
+            startActivity(intent);
         });
     }
 }

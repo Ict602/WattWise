@@ -1,123 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5F9FF"
+    android:orientation="vertical"
+    android:padding="24dp">
 
-    <!-- Background -->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/landing"
-        android:scaleType="centerCrop" />
-
-    <!-- Dark Overlay -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#88000000" />
-
-    <!-- Content -->
+    <!-- HEADER -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp">
+        android:layout_width="366dp"
+        android:layout_height="122dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/bg_light_header"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="60dp" />
-
-        <!-- Logo -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="⚡ WattWise"
+            android:textColor="#FFFFFF"
             android:textSize="34sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF" />
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Smart Electricity Bill Estimator"
-            android:textColor="#CCCCCC"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <!-- Main Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Smart Energy."
-            android:textColor="#FFFFFF"
-            android:textSize="40sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lower Bills."
-            android:textColor="#FFC107"
-            android:textSize="40sp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="70dp"
-            android:layout_height="4dp"
-            android:background="#00E5FF"
-            android:layout_marginTop="12dp" />
-
-        <TextView
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="Monitor your electricity usage, estimate monthly bills and save money smarter."
-            android:textAlignment="center"
-            android:textColor="#DDDDDD"
-            android:textSize="16sp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
-
-        <!-- Saving Highlight Card -->
-        <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="58dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/bg_saving_card"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="⚡ Save up to 30% monthly"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <!-- Button -->
-        <Button
-            android:id="@+id/btnStart"
-            android:layout_width="320dp"
-            android:layout_height="60dp"
-            android:text="GET STARTED   →"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:backgroundTint="#FFC107"
-            android:layout_marginBottom="45dp" />
+            android:textColor="#EAF2FF"
+            android:textSize="18sp" />
 
     </LinearLayout>
+    <!-- FILL SPACE -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+    <!-- TITLE -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="Smart Energy."
+        android:textColor="#1565C0"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Lower Bills."
+        android:textColor="#1A1A1A"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="70dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:background="#1565C0" />
+
+    <TextView
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="Monitor electricity usage, estimate monthly bills and manage energy costs smarter."
+        android:textColor="#6B7280"
+        android:textSize="14sp" />
+    <!-- FILL SPACE -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- IMAGE -->
+
+
+    <!-- FILL SPACE -->
+    <ImageView
+        android:layout_width="327dp"
+        android:layout_height="249dp"
+        android:layout_gravity="center_horizontal"
+        android:alpha="0.92"
+        android:scaleType="fitCenter"
+        android:src="@drawable/landing" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- FEATURES -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="@drawable/bg_light_card"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚡ Bill Estimator"
+            android:textColor="#1565C0"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  •  "
+            android:textColor="#9CA3AF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📊 Bill History"
+            android:textColor="#1565C0"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  •  "
+            android:textColor="#9CA3AF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💰 Cost Saving"
+            android:textColor="#1565C0"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- BUTTON -->
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#1565C0"
+        android:text="GET STARTED  →"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

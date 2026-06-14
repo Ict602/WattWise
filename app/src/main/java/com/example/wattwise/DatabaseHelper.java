@@ -5,12 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteConstraintException;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "WattWiseDB.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -18,13 +17,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        db.execSQL("CREATE TABLE users (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "fullname TEXT, " +
-                "email TEXT UNIQUE, " +
-                "password TEXT)");
-
         db.execSQL("CREATE TABLE bills (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "month TEXT, " +
@@ -33,9 +25,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "rebate INTEGER, " +
                 "totalCharges REAL, " +
                 "finalCost REAL)");
-
-        db.execSQL("INSERT INTO users (fullname, email, password) VALUES " +
-                "('Azura', 'azura@gmail.com', '123456')");
     }
 
     @Override
@@ -44,88 +33,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS bills");
         onCreate(db);
     }
-
-    // ================= USER FUNCTIONS =================
-
-    public boolean insertUser(String fullname, String email, String password) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("fullname", fullname);
-        values.put("email", email);
-        values.put("password", password);
-
-        try {
-            long result = db.insertOrThrow("users", null, values);
-            return result != -1;
-        } catch (SQLiteConstraintException e) {
-            return false;
-        }
-    }
-
-    public boolean checkEmailExists(String email) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery(
-                "SELECT * FROM users WHERE email = ?",
-                new String[]{email}
-        );
-
-        boolean exists = cursor.getCount() > 0;
-        cursor.close();
-
-        return exists;
-    }
-
-    public boolean checkLogin(String email, String password) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery(
-                "SELECT * FROM users WHERE email = ? AND password = ?",
-                new String[]{email, password}
-        );
-
-        boolean exists = cursor.getCount() > 0;
-        cursor.close();
-
-        return exists;
-    }
-
-    public String getUserName(String email) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery(
-                "SELECT fullname FROM users WHERE email = ?",
-                new String[]{email}
-        );
-
-        String name = "User";
-
-        if (cursor.moveToFirst()) {
-            name = cursor.getString(0);
-        }
-
-        cursor.close();
-        return name;
-    }
-
-    public boolean updatePassword(String email, String newPassword) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("password", newPassword);
-
-        int result = db.update(
-                "users",
-                values,
-                "email = ?",
-                new String[]{email}
-        );
-
-        return result > 0;
-    }
-
-    // ================= BILL FUNCTIONS =================
 
     public boolean insertBill(String month, int year, int unit, int rebate, double totalCharges, double finalCost) {
         SQLiteDatabase db = this.getWritableDatabase();

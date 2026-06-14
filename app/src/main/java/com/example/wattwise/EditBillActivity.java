@@ -1,16 +1,14 @@
 package com.example.wattwise;
 
-import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,13 +18,16 @@ import java.util.Locale;
 
 public class EditBillActivity extends AppCompatActivity {
 
-    Spinner spMonth;
+    RadioButton rbJan, rbFeb, rbMar, rbApr, rbMay, rbJun;
+    RadioButton rbJul, rbAug, rbSep, rbOct, rbNov, rbDec;
+
     EditText etUnit;
+    SeekBar seekRebate;
 
     Button btnUpdate, btnCancel;
-    Button btnRebate0, btnRebate1, btnRebate2, btnRebate3, btnRebate4, btnRebate5;
 
-    TextView txtMonthBadge, txtCurrentRecord, txtCurrentCost, txtNewCost;
+    TextView txtMonthBadge, txtCurrentRecord, txtCurrentCost;
+    TextView txtNewCost, txtRebateLabel;
 
     DatabaseHelper databaseHelper;
 
@@ -34,15 +35,11 @@ public class EditBillActivity extends AppCompatActivity {
     int currentYear = 0;
     int unit = 0;
     int rebate = 0;
+
     String month = "";
 
     double totalCharges = 0.0;
     double finalCost = 0.0;
-
-    String[] months = {
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,26 +48,33 @@ public class EditBillActivity extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(this);
 
-        spMonth = findViewById(R.id.spMonth);
+        rbJan = findViewById(R.id.rbJan);
+        rbFeb = findViewById(R.id.rbFeb);
+        rbMar = findViewById(R.id.rbMar);
+        rbApr = findViewById(R.id.rbApr);
+        rbMay = findViewById(R.id.rbMay);
+        rbJun = findViewById(R.id.rbJun);
+        rbJul = findViewById(R.id.rbJul);
+        rbAug = findViewById(R.id.rbAug);
+        rbSep = findViewById(R.id.rbSep);
+        rbOct = findViewById(R.id.rbOct);
+        rbNov = findViewById(R.id.rbNov);
+        rbDec = findViewById(R.id.rbDec);
+
         etUnit = findViewById(R.id.etUnit);
+        seekRebate = findViewById(R.id.seekRebate);
 
         btnUpdate = findViewById(R.id.btnUpdate);
         btnCancel = findViewById(R.id.btnCancel);
-
-        btnRebate0 = findViewById(R.id.btnRebate0);
-        btnRebate1 = findViewById(R.id.btnRebate1);
-        btnRebate2 = findViewById(R.id.btnRebate2);
-        btnRebate3 = findViewById(R.id.btnRebate3);
-        btnRebate4 = findViewById(R.id.btnRebate4);
-        btnRebate5 = findViewById(R.id.btnRebate5);
 
         txtMonthBadge = findViewById(R.id.txtMonthBadge);
         txtCurrentRecord = findViewById(R.id.txtCurrentRecord);
         txtCurrentCost = findViewById(R.id.txtCurrentCost);
         txtNewCost = findViewById(R.id.txtNewCost);
+        txtRebateLabel = findViewById(R.id.txtRebateLabel);
 
-        setupMonthSpinner();
-        setupRebateButtons();
+        setupMonthSelection();
+        setupRebateSlider();
 
         billId = getIntent().getIntExtra("BILL_ID", -1);
 
@@ -97,77 +101,71 @@ public class EditBillActivity extends AppCompatActivity {
             }
         });
 
-        spMonth.setOnItemSelectedListener(
-                new android.widget.AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(
-                            android.widget.AdapterView<?> parent,
-                            View view,
-                            int position,
-                            long id
-                    ) {
-                        updatePreview();
-                    }
-
-                    @Override
-                    public void onNothingSelected(
-                            android.widget.AdapterView<?> parent
-                    ) {
-                    }
-                }
-        );
-
         btnUpdate.setOnClickListener(v -> confirmUpdate());
-        btnCancel.setOnClickListener(v -> finish());
+
+        btnCancel.setOnClickListener(v -> {
+            showConfirmDialog(
+                    "↩️",
+                    "Cancel Edit",
+                    "Are you sure you want to cancel editing this record?",
+                    "Yes",
+                    "No",
+                    () -> finish()
+            );
+        });
     }
 
-    private void setupMonthSpinner() {
-        ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(
-                this,
-                R.layout.spinner_selected,
-                months
-        );
-
-        monthAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
-        spMonth.setAdapter(monthAdapter);
-    }
-
-    private void setupRebateButtons() {
-        btnRebate0.setOnClickListener(v -> selectRebate(0));
-        btnRebate1.setOnClickListener(v -> selectRebate(1));
-        btnRebate2.setOnClickListener(v -> selectRebate(2));
-        btnRebate3.setOnClickListener(v -> selectRebate(3));
-        btnRebate4.setOnClickListener(v -> selectRebate(4));
-        btnRebate5.setOnClickListener(v -> selectRebate(5));
-
-        selectRebate(0);
-    }
-
-    private void selectRebate(int value) {
-        rebate = value;
-
-        Button[] buttons = {
-                btnRebate0,
-                btnRebate1,
-                btnRebate2,
-                btnRebate3,
-                btnRebate4,
-                btnRebate5
+    private void setupMonthSelection() {
+        RadioButton[] monthButtons = {
+                rbJan, rbFeb, rbMar, rbApr, rbMay, rbJun,
+                rbJul, rbAug, rbSep, rbOct, rbNov, rbDec
         };
 
-        for (Button button : buttons) {
-            button.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
-            );
-            button.setTextColor(Color.parseColor("#020B1A"));
+        String[] monthNames = {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+
+        for (int i = 0; i < monthButtons.length; i++) {
+            int index = i;
+
+            monthButtons[i].setOnClickListener(v -> {
+                for (RadioButton rb : monthButtons) {
+                    rb.setChecked(false);
+                }
+
+                monthButtons[index].setChecked(true);
+                month = monthNames[index];
+
+                txtMonthBadge.setText(month.substring(0, 3).toUpperCase());
+                txtCurrentRecord.setText(month + " " + currentYear);
+
+                updatePreview();
+            });
         }
+    }
 
-        buttons[value].setBackgroundTintList(
-                ColorStateList.valueOf(Color.parseColor("#FFC107"))
-        );
-        buttons[value].setTextColor(Color.BLACK);
+    private void setupRebateSlider() {
+        seekRebate.setMax(5);
+        seekRebate.setProgress(0);
+        txtRebateLabel.setText("Selected Rebate: 0%");
 
-        updatePreview();
+        seekRebate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                rebate = progress;
+                txtRebateLabel.setText("Selected Rebate: " + rebate + "%");
+                updatePreview();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
     private void loadExistingData() {
@@ -187,15 +185,10 @@ public class EditBillActivity extends AppCompatActivity {
             );
 
             etUnit.setText(String.valueOf(unit));
+            checkSelectedMonth(month);
 
-            for (int i = 0; i < months.length; i++) {
-                if (months[i].equals(month)) {
-                    spMonth.setSelection(i);
-                    break;
-                }
-            }
-
-            selectRebate(rebate);
+            seekRebate.setProgress(rebate);
+            txtRebateLabel.setText("Selected Rebate: " + rebate + "%");
 
         } else {
             showInfoDialog(
@@ -209,6 +202,21 @@ public class EditBillActivity extends AppCompatActivity {
         if (cursor != null) {
             cursor.close();
         }
+    }
+
+    private void checkSelectedMonth(String selectedMonth) {
+        rbJan.setChecked(selectedMonth.equals("January"));
+        rbFeb.setChecked(selectedMonth.equals("February"));
+        rbMar.setChecked(selectedMonth.equals("March"));
+        rbApr.setChecked(selectedMonth.equals("April"));
+        rbMay.setChecked(selectedMonth.equals("May"));
+        rbJun.setChecked(selectedMonth.equals("June"));
+        rbJul.setChecked(selectedMonth.equals("July"));
+        rbAug.setChecked(selectedMonth.equals("August"));
+        rbSep.setChecked(selectedMonth.equals("September"));
+        rbOct.setChecked(selectedMonth.equals("October"));
+        rbNov.setChecked(selectedMonth.equals("November"));
+        rbDec.setChecked(selectedMonth.equals("December"));
     }
 
     private void updatePreview() {
@@ -249,14 +257,24 @@ public class EditBillActivity extends AppCompatActivity {
                 "📝",
                 "Update Record",
                 "Are you sure you want to update this bill record?",
-                "Yes",
-                "No",
-                () -> updateRecord()
+                "Update",
+                "Cancel",
+                this::updateRecord
         );
     }
 
     private void updateRecord() {
         String unitText = etUnit.getText().toString().trim();
+
+        if (month.isEmpty()) {
+            showInfoDialog(
+                    "⚠️",
+                    "Month Required",
+                    "Please select a month.",
+                    false
+            );
+            return;
+        }
 
         if (unitText.isEmpty()) {
             showInfoDialog(
@@ -275,9 +293,10 @@ public class EditBillActivity extends AppCompatActivity {
             showInfoDialog(
                     "⚠️",
                     "Invalid Unit",
-                    "Please enter a valid number.",
+                    "Please enter numbers only.",
                     false
             );
+            etUnit.setText("0");
             etUnit.requestFocus();
             return;
         }
@@ -285,15 +304,14 @@ public class EditBillActivity extends AppCompatActivity {
         if (unit < 1 || unit > 1000) {
             showInfoDialog(
                     "⚠️",
-                    "Invalid Range",
-                    "Unit must be between 1 and 1000 kWh.",
+                    "Invalid Consumption",
+                    "Electricity consumption must be between 1 and 1000 kWh only.",
                     false
             );
+            etUnit.setText("0");
             etUnit.requestFocus();
             return;
         }
-
-        month = spMonth.getSelectedItem().toString();
 
         totalCharges = calculateTotalCharges(unit);
         totalCharges = Math.round(totalCharges * 100.0) / 100.0;
@@ -332,7 +350,8 @@ public class EditBillActivity extends AppCompatActivity {
         if (unit <= 200) {
             return unit * 0.218;
         } else if (unit <= 300) {
-            return (200 * 0.218) + ((unit - 200) * 0.334);
+            return (200 * 0.218)
+                    + ((unit - 200) * 0.334);
         } else if (unit <= 600) {
             return (200 * 0.218)
                     + (100 * 0.334)
@@ -402,12 +421,14 @@ public class EditBillActivity extends AppCompatActivity {
         TextView txtDialogIcon = view.findViewById(R.id.txtDialogIcon);
         TextView txtDialogTitle = view.findViewById(R.id.txtDialogTitle);
         TextView txtDialogMessage = view.findViewById(R.id.txtDialogMessage);
+
         Button btnYes = view.findViewById(R.id.btnYes);
         Button btnNo = view.findViewById(R.id.btnNo);
 
         txtDialogIcon.setText(icon);
         txtDialogTitle.setText(title);
         txtDialogMessage.setText(message);
+
         btnYes.setText(positiveText);
         btnNo.setText(negativeText);
 
